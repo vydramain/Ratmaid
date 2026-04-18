@@ -1,0 +1,45 @@
+[gd_scene format=3 uid="uid://xhem0muep1t1"]
+
+[ext_resource type="Script" uid="uid://jfxwh8d86h6t" path="res://scripts/player.gd" id="1_player"]
+[ext_resource type="PackedScene" uid="uid://c0iuqrq6c0qbw" path="res://scenes/bullet/bullet.tscn" id="2_bullet"]
+[ext_resource type="Texture2D" uid="uid://c8ky4urk0tqsi" path="res://images/gg_arms.png" id="3_lvxji"]
+[ext_resource type="Texture2D" uid="uid://fspf2biiyfda" path="res://images/gg_colortough.png" id="4_p47bc"]
+
+[sub_resource type="CircleShape2D" id="PlayerShape"]
+radius = 16.0
+
+[node name="Player" type="CharacterBody2D" unique_id=866164076]
+collision_layer = 2
+script = ExtResource("1_player")
+bullet_scene = ExtResource("2_bullet")
+
+[node name="FacingSprite" type="Sprite2D" parent="." unique_id=248004449]
+texture_filter = 5
+texture_repeat = 1
+position = Vector2(16, 0)
+rotation = 1.5707964
+texture = ExtResource("3_lvxji")
+hframes = 4
+
+[node name="LegsSprite" type="Sprite2D" parent="." unique_id=858093557]
+texture_filter = 5
+texture_repeat = 1
+rotation = 1.5707964
+texture = ExtResource("4_p47bc")
+hframes = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=322901092]
+shape = SubResource("PlayerShape")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1272078346]
+zoom = Vector2(1.2, 1.2)
+
+[node name="MuzzleLeft" type="Marker2D" parent="." unique_id=1624581511]
+position = Vector2(21, -6)
+
+[node name="MuzzleRight" type="Marker2D" parent="." unique_id=1034125466]
+position = Vector2(21, 5)
+
+[node name="ShootCooldown" type="Timer" parent="." unique_id=1766858703]
+wait_time = 0.12
+one_shot = true

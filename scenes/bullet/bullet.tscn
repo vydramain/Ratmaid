@@ -1,0 +1,26 @@
+[gd_scene load_steps=3 format=3 uid="uid://cbullet0ratmaid1"]
+
+[ext_resource type="Script" path="res://scripts/bullet.gd" id="1_bullet"]
+
+[sub_resource type="RectangleShape2D" id="BulletShape"]
+size = Vector2(10, 4)
+
+[node name="Bullet" type="Area2D"]
+collision_layer = 8
+collision_mask = 5
+script = ExtResource("1_bullet")
+
+[node name="Sprite" type="ColorRect" parent="."]
+offset_left = -5.0
+offset_top = -2.0
+offset_right = 5.0
+offset_bottom = 2.0
+color = Color(1, 0.85, 0.2, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("BulletShape")
+
+[node name="Lifetime" type="Timer" parent="."]
+wait_time = 1.5
+one_shot = true
+autostart = true

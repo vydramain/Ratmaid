@@ -1,71 +1,67 @@
------------------------------------
+# Ratmaid
 
-_DISCLAIMER:_
+![Ratmaid](images/Hakos_Baelz_Maid.jpg "Ratmaid")
 
-Welcome to **Ratmaid raylib game**!
+Top-down шутер в духе Hotline Miami на Godot 4.6. Тестовый прототип: меню, арена, игрок с двумя пистолетами (стреляют поочерёдно), болванчики-враги, умирающие с одной пули.
 
-This template provides a base structure to start developing a small raylib game in plain C. The repo is also pre-configured with a default `LICENSE` (zlib/libpng) and a `README.md` (this one) to be properly filled by users. Feel free to change the LICENSE as required.
+## Управление
 
-All the sections defined by `$(Data to Fill)` are expected to be edited and filled properly. It's recommended to delete this disclaimer message after editing this `README.md` file.
+| Действие         | Геймпад        | Клавиатура/мышь      |
+| ---------------- | -------------- | -------------------- |
+| Ходьба           | Левый стик     | WASD / стрелки       |
+| Прицел           | Правый стик    | Мышь                 |
+| Огонь            | RT / R1        | ЛКМ / Пробел         |
 
-This template has been created to be used with raylib (www.raylib.com) and it's licensed under an unmodified zlib/libpng license.
+## Структура
 
-_Copyright (c) 2014-2023 Ramon Santamaria ([@raysan5](https://twitter.com/raysan5))_
+```
+scenes/
+  menu/main_menu.tscn       главное меню (Start / Quit)
+  levels/level_01.tscn      арена 2000×1200 с чёрными стенами
+  player/player.tscn        CharacterBody2D: Camera2D, FacingSprite, LegsSprite, два Marker2D-дула
+  bullet/bullet.tscn        Area2D со SPEED=900 и Lifetime 1.5 сек
+  enemy/enemy.tscn          CharacterBody2D, случайное блуждание
+  corpse/corpse.tscn        плейсхолдер трупа
+scripts/
+  main_menu.gd              переход на уровень
+  player.gd                 движение, прицел, чередование пистолетов, анимация рук/ног
+  bullet.gd                 движение + убийство врагов через body.die()
+  enemy.gd                  wander AI, die() спавнит corpse
+```
 
------------------------------------
+Главная сцена (`run/main_scene`) — `scenes/menu/main_menu.tscn`.
 
-## Getting Started with this template
-- After extracting the zip, the parent folder `raylib-game-template` should exist in the same directory as `raylib` itself.  So your file structure should look like this:
-    - Some parent directory
-        - `raylib`
-            - the contents of https://github.com/raysan5/raylib
-        - `raylib-game-template`
-            - this `README.md` and all other raylib-game-template files
-- If using Visual Studio, open projects/VS2022/raylib-game-template.sln
-- Select on `raylib_game` in the solution explorer, then in the toolbar at the top, click `Project` > `Set as Startup Project`
-- Now you're all set up!  Click `Local Windows Debugger` with the green play arrow and the project will run.
+## Слои коллизий
 
-## $(Ratmaid)
+| Слой | Назначение       |
+| ---- | ---------------- |
+| 1    | Стены            |
+| 2    | Игрок            |
+| 3    | Враги            |
+| 4    | Пули игрока      |
 
-![$(Ratmaid)](images/Hakos_Baelz_Maid.jpg "$(Ratmaid)")
+Маска пуль — 1 + 3 (стены и враги, игнорируя игрока).
 
-### Description
+## Анимации игрока
 
-$(Ratmaid project)
+`FacingSprite` и `LegsSprite` — `Sprite2D` с `hframes = 4`.
 
-### Features
+- **Руки:** кадр 0 — покой, кадр 1 — выстрел правой, кадр 3 — выстрел левой. Кадр выстрела держится пока не истечёт `ShootCooldown` (0.12 сек), потом возвращается в 0.
+- **Ноги:** кадр 0 при стоянии; при движении — чередование кадров 1 и 3 каждые `STEP_DISTANCE` (36 px) пройденного пути.
 
- - $(Game Feature 01)
- - $(Game Feature 02)
- - $(Game Feature 03)
+## Запуск
 
-### Controls
+Открыть проект в Godot 4.6 и нажать F5. Или headless-проверка:
 
-Keyboard:
- - $(Game Control 01)
- - $(Game Control 02)
- - $(Game Control 03)
+```sh
+godot --headless --quit-after 180
+```
 
-### Screenshots
+## Что дальше (roadmap)
 
-_TODO: Show your game to the world, animated GIFs recommended!._
-
-### Developers
-
- - $(Developer 01) - $(Role/Tasks Developed)
- - $(Developer 02) - $(Role/Tasks Developed)
- - $(Developer 03) - $(Role/Tasks Developed)
-
-### Links
-
- - YouTube Gameplay: $(YouTube Link)
- - itch.io Release: $(itch.io Game Page)
- - Steam Release: $(Steam Game Page)
-
-### License
-
-This game sources are licensed under an unmodified zlib/libpng license, which is an OSI-certified, BSD-like license that allows static linking with closed source software. Check [LICENSE](LICENSE) for further details.
-
-$(Additional Licenses)
-
-*Copyright (c) $(Year) $(User Name) ($(User Twitter/GitHub Name))*
+- Заменить плейсхолдер-спрайты врагов и трупов на ассеты
+- TileMapLayer для пола и декораций
+- Поворот ног по направлению движения отдельно от аима (как в HM)
+- HUD, звуки, кровь
+- Умный AI врагов (сейчас просто wandering)
+- Дополнительные уровни, оружие, перезарядка
