@@ -4,6 +4,7 @@ const LEVEL_PATH := "res://scenes/levels/level_01.tscn"
 
 
 func _ready() -> void:
+	MusicManager.set_state(MusicManager.State.MENU)
 	$Panel/VBox/StartButton.grab_focus()
 	$Panel/VBox/StartButton.pressed.connect(_on_start_pressed)
 	$Panel/VBox/QuitButton.pressed.connect(_on_quit_pressed)

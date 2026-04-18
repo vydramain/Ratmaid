@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://ydcbs2cvn7up"]
+
+[ext_resource type="Script" uid="uid://dev34elt2jxm5" path="res://scripts/music_manager.gd" id="1_music"]
+[ext_resource type="AudioStream" uid="uid://cci16wk0waw2i" path="res://audio/music/r_drums.ogg" id="2_avid7"]
+[ext_resource type="AudioStream" uid="uid://d2fgqyhmsgyi0" path="res://audio/music/r_bass_groove.ogg" id="3_kty85"]
+[ext_resource type="AudioStream" uid="uid://cvlos27fprwfk" path="res://audio/music/r_bass_low.ogg" id="4_1t1ex"]
+[ext_resource type="AudioStream" uid="uid://bwwpe8wonjvif" path="res://audio/music/r_guitar_chords.ogg" id="5_dobxy"]
+[ext_resource type="AudioStream" uid="uid://bvbyu8sdi0gyy" path="res://audio/music/r_guitar_notes.ogg" id="6_62kub"]
+
+[node name="MusicManager" type="Node" unique_id=688930149]
+script = ExtResource("1_music")
+stream_drums = ExtResource("2_avid7")
+stream_bass_groove = ExtResource("3_kty85")
+stream_bass_low = ExtResource("4_1t1ex")
+stream_guitar_chords = ExtResource("5_dobxy")
+stream_guitar_notes = ExtResource("6_62kub")

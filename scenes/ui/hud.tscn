@@ -1,0 +1,77 @@
+[gd_scene load_steps=3 format=3 uid="uid://chud0ratmaid1"]
+
+[ext_resource type="Script" path="res://scripts/hud.gd" id="1_hud"]
+[ext_resource type="PackedScene" uid="uid://cdialogue0001" path="res://scenes/ui/dialogue_box.tscn" id="2_dialogue"]
+
+[node name="HUD" type="CanvasLayer"]
+script = ExtResource("1_hud")
+
+[node name="TimerLabel" type="Label" parent="."]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_top = 0.0
+anchor_right = 0.5
+anchor_bottom = 0.0
+offset_left = -40.0
+offset_top = 8.0
+offset_right = 40.0
+offset_bottom = 32.0
+horizontal_alignment = 1
+text = "1:00"
+visible = false
+
+[node name="ModeLabel" type="Label" parent="."]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 0.0
+offset_left = -120.0
+offset_top = 8.0
+offset_right = -8.0
+offset_bottom = 28.0
+horizontal_alignment = 2
+text = "[ ПИСТОЛЕТЫ ]"
+visible = false
+
+[node name="ResultPanel" type="PanelContainer" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -100.0
+offset_right = 200.0
+offset_bottom = 100.0
+visible = false
+
+[node name="VBox" type="VBoxContainer" parent="ResultPanel"]
+layout_mode = 2
+
+[node name="ResultLabel" type="Label" parent="ResultPanel/VBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(380, 80)
+horizontal_alignment = 1
+autowrap_mode = 3
+text = "GAME OVER"
+
+[node name="HintLabel" type="Label" parent="ResultPanel/VBox"]
+layout_mode = 2
+horizontal_alignment = 1
+text = "[Enter] Вернуться в меню"
+
+[node name="HintsBar" type="Label" parent="."]
+anchors_preset = 7
+anchor_left = 0.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = -24.0
+offset_right = -8.0
+offset_bottom = -4.0
+horizontal_alignment = 1
+visible = false
+
+[node name="DialogueBox" parent="." instance=ExtResource("2_dialogue")]

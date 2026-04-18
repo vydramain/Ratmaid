@@ -8,6 +8,9 @@
 [sub_resource type="CircleShape2D" id="PlayerShape"]
 radius = 16.0
 
+[sub_resource type="CircleShape2D" id="InteractionShape"]
+radius = 40.0
+
 [node name="Player" type="CharacterBody2D" unique_id=866164076]
 collision_layer = 2
 script = ExtResource("1_player")
@@ -43,3 +46,10 @@ position = Vector2(21, 5)
 [node name="ShootCooldown" type="Timer" parent="." unique_id=1766858703]
 wait_time = 0.12
 one_shot = true
+
+[node name="InteractionArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 4
+
+[node name="InteractionShape" type="CollisionShape2D" parent="InteractionArea"]
+shape = SubResource("InteractionShape")
