@@ -20,6 +20,7 @@ var cleanup_timer := 0.0
 var player: CharacterBody2D = null
 var _trash_bin: Node2D = null
 var _aggroed_enemies := 0
+var _swat_spawned := false
 
 
 func _ready() -> void:
@@ -47,10 +48,14 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if current_state != State.CLEANUP:
 		return
-	cleanup_timer -= delta
+	if cleanup_timer > 0.0:
+		cleanup_timer -= delta
+		if cleanup_timer <= 0.0:
+			cleanup_timer = 0.0
+			if not _swat_spawned:
+				_swat_spawned = true
+				_spawn_swat()
 	hud.update_timer(cleanup_timer)
-	if cleanup_timer <= 0.0:
-		_enter_lose(State.LOSE_TIMER)
 
 
 # ─── Переходы состояний ───────────────────────────────────────────────────────
@@ -107,7 +112,6 @@ func _enter_lose(reason: State) -> void:
 			hud.show_gameover("exit_early")
 		State.LOSE_TIMER:
 			hud.show_gameover("timer")
-			_spawn_swat()
 
 
 # ─── Обработчики сигналов ─────────────────────────────────────────────────────

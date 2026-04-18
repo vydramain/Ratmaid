@@ -25,10 +25,11 @@ func show_timer(seconds: float) -> void:
 
 
 func update_timer(seconds: float) -> void:
-	var total: int = int(seconds)
-	var mins: int = total / 60
-	var secs: int = total % 60
-	timer_label.text = "%d:%02d" % [mins, secs]
+	var clamped := maxf(seconds, 0.0)
+	var mins: int = int(clamped) / 60
+	var secs: int = int(clamped) % 60
+	var ms: int = int(fmod(clamped, 1.0) * 1000)
+	timer_label.text = "%d:%02d.%03d" % [mins, secs, ms]
 
 
 func hide_timer() -> void:

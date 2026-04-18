@@ -1,20 +1,30 @@
-[gd_scene load_steps=2 format=3 uid="uid://ccorpse0ratmaid1"]
+[gd_scene format=3 uid="uid://ccorpse0ratmaid1"]
+
+[ext_resource type="Script" path="res://scripts/corpse.gd" id="1_corpse"]
+[ext_resource type="Texture2D" path="res://images/en_dead.png" id="2_dead"]
+
+[sub_resource type="CircleShape2D" id="BodyShape"]
+radius = 12.0
 
 [sub_resource type="CircleShape2D" id="PickupShape"]
 radius = 20.0
 
-[node name="Corpse" type="Node2D"]
+[node name="Corpse" type="CharacterBody2D"]
+collision_layer = 0
+collision_mask = 1
+script = ExtResource("1_corpse")
 
-[node name="Sprite" type="ColorRect" parent="."]
-offset_left = -16.0
-offset_top = -16.0
-offset_right = 16.0
-offset_bottom = 16.0
-color = Color(0.6, 0.05, 0.05, 1)
+[node name="Sprite" type="Sprite2D" parent="."]
+texture_filter = 5
+texture_repeat = 1
+texture = ExtResource("2_dead")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("BodyShape")
 
 [node name="PickupArea" type="Area2D" parent="."]
 collision_layer = 4
-collision_mask = 2
+collision_mask = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="PickupArea"]
+[node name="PickupShape" type="CollisionShape2D" parent="PickupArea"]
 shape = SubResource("PickupShape")

@@ -1,26 +1,72 @@
 [gd_scene format=3 uid="uid://bvbo1i2a6s8o7"]
 
 [ext_resource type="Script" path="res://scripts/swat_enemy.gd" id="1_swat"]
+[ext_resource type="Texture2D" path="res://images/sw_moving.png" id="2_swmov"]
+[ext_resource type="Texture2D" path="res://images/sw_guns_action.png" id="3_swguns"]
+[ext_resource type="PackedScene" path="res://scenes/enemy/enemy_bullet.tscn" id="4_ebullet"]
+
+[sub_resource type="AtlasTexture" id="AT_GA0"]
+atlas = ExtResource("3_swguns")
+region = Rect2(0, 0, 32, 48)
+
+[sub_resource type="AtlasTexture" id="AT_GA1"]
+atlas = ExtResource("3_swguns")
+region = Rect2(32, 0, 32, 48)
+
+[sub_resource type="AtlasTexture" id="AT_GA2"]
+atlas = ExtResource("3_swguns")
+region = Rect2(64, 0, 32, 48)
+
+[sub_resource type="AtlasTexture" id="AT_GA3"]
+atlas = ExtResource("3_swguns")
+region = Rect2(96, 0, 32, 48)
+
+[sub_resource type="SpriteFrames" id="SwatFrames"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AT_GA0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AT_GA1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AT_GA2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AT_GA3")
+}],
+"loop": false,
+"name": &"guns_action",
+"speed": 12.0
+}]
 
 [sub_resource type="CircleShape2D" id="SwatShape"]
 radius = 16.0
 
 [node name="SwatEnemy" type="CharacterBody2D"]
 script = ExtResource("1_swat")
+enemy_bullet_scene = ExtResource("4_ebullet")
 
-[node name="Sprite" type="ColorRect" parent="."]
-offset_left = -16.0
-offset_top = -16.0
-offset_right = 16.0
-offset_bottom = 16.0
-color = Color(0.5, 0.5, 0.6, 1)
+[node name="FacingSprite" type="AnimatedSprite2D" parent="."]
+texture_filter = 5
+texture_repeat = 1
+position = Vector2(10, 0)
+rotation = 1.5707964
+sprite_frames = SubResource("SwatFrames")
+animation = &"guns_action"
+
+[node name="LegsSprite" type="Sprite2D" parent="."]
+texture_filter = 5
+texture_repeat = 1
+position = Vector2(10, 0)
+rotation = 1.5707964
+texture = ExtResource("2_swmov")
+hframes = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("SwatShape")
 
-[node name="KillArea" type="Area2D" parent="."]
-collision_layer = 0
-collision_mask = 2
+[node name="Muzzle" type="Marker2D" parent="."]
+position = Vector2(18, 0)
 
-[node name="KillShape" type="CollisionShape2D" parent="KillArea"]
-shape = SubResource("SwatShape")

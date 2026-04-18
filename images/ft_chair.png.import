@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://e60t07b657c0"
-path="res://.godot/imported/Hakos_Baelz_Maid.jpg-0b186f13fa0d7caf442ef73dd62c99da.ctex"
+uid="uid://b3vukqbtpbxc"
+path="res://.godot/imported/ft_chair.png-d8f31e18c2b9f8309c468889edc412fe.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://images/Hakos_Baelz_Maid.jpg"
-dest_files=["res://.godot/imported/Hakos_Baelz_Maid.jpg-0b186f13fa0d7caf442ef73dd62c99da.ctex"]
+source_file="res://images/ft_chair.png"
+dest_files=["res://.godot/imported/ft_chair.png-d8f31e18c2b9f8309c468889edc412fe.ctex"]
 
 [params]
 

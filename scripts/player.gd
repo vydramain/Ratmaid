@@ -8,7 +8,7 @@ signal player_died
 
 @export var bullet_scene: PackedScene
 
-@onready var facing_sprite: Sprite2D = $FacingSprite
+@onready var facing_sprite: AnimatedSprite2D = $FacingSprite
 @onready var legs_sprite: Sprite2D = $LegsSprite
 
 var next_pistol := 0
@@ -18,6 +18,7 @@ var step_accum := 0.0
 var is_dead := false
 var mop_mode := false
 var carrying_corpse: Node2D = null
+var _weapons_locked := false
 
 
 func _ready() -> void:
@@ -44,7 +45,7 @@ func _physics_process(delta: float) -> void:
 	_update_hands()
 	_update_legs(delta)
 
-	if not mop_mode and carrying_corpse == null and Input.is_action_pressed("shoot") and $ShootCooldown.is_stopped():
+	if not mop_mode and not _weapons_locked and carrying_corpse == null and Input.is_action_pressed("shoot") and $ShootCooldown.is_stopped():
 		_shoot()
 
 
@@ -53,11 +54,11 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 	if event.is_action_pressed("interact"):
 		try_interact()
-	if event.is_action_pressed("toggle_mop") and carrying_corpse == null:
+	if event.is_action_pressed("toggle_mop") and carrying_corpse == null and not _weapons_locked:
 		toggle_mop_mode()
 
 
-func die() -> void:
+func die(_impulse: Vector2 = Vector2.ZERO) -> void:
 	if is_dead:
 		return
 	is_dead = true
@@ -67,8 +68,38 @@ func die() -> void:
 
 
 func toggle_mop_mode() -> void:
-	mop_mode = not mop_mode
-	# TODO: заглушка — сменить спрайт рук на швабру/пистолет
+	_weapons_locked = true
+	if not mop_mode:
+		facing_sprite.play("guns_hide")
+		facing_sprite.animation_finished.connect(_on_guns_hidden, CONNECT_ONE_SHOT)
+	else:
+		facing_sprite.play("mop_hide")
+		facing_sprite.animation_finished.connect(_on_mop_hidden, CONNECT_ONE_SHOT)
+
+
+func _on_guns_hidden() -> void:
+	facing_sprite.play_backwards("mop_hide")
+	facing_sprite.animation_finished.connect(_on_mop_drawn, CONNECT_ONE_SHOT)
+
+
+func _on_mop_drawn() -> void:
+	mop_mode = true
+	_weapons_locked = false
+	facing_sprite.play("mop_action")
+	var managers := get_tree().get_nodes_in_group("level_manager")
+	if managers.size() > 0:
+		managers[0].notify_mode_changed(mop_mode)
+
+
+func _on_mop_hidden() -> void:
+	facing_sprite.play_backwards("guns_hide")
+	facing_sprite.animation_finished.connect(_on_guns_drawn, CONNECT_ONE_SHOT)
+
+
+func _on_guns_drawn() -> void:
+	mop_mode = false
+	_weapons_locked = false
+	facing_sprite.stop()
 	var managers := get_tree().get_nodes_in_group("level_manager")
 	if managers.size() > 0:
 		managers[0].notify_mode_changed(mop_mode)
@@ -103,8 +134,7 @@ func drop_corpse() -> void:
 
 
 func _update_hands() -> void:
-	if $ShootCooldown.is_stopped():
-		facing_sprite.frame = 0
+	pass
 
 
 func _update_legs(delta: float) -> void:
@@ -128,6 +158,7 @@ func _shoot() -> void:
 	bullet.global_position = muzzle.global_position
 	bullet.rotation = rotation
 	get_tree().current_scene.add_child(bullet)
-	facing_sprite.frame = 3 if next_pistol == 0 else 1
 	next_pistol = 1 - next_pistol
 	$ShootCooldown.start()
+	facing_sprite.play("guns_action")
+	facing_sprite.animation_finished.connect(facing_sprite.stop, CONNECT_ONE_SHOT)

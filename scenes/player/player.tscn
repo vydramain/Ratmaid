@@ -5,6 +5,141 @@
 [ext_resource type="Texture2D" uid="uid://c8ky4urk0tqsi" path="res://images/gg_arms.png" id="3_lvxji"]
 [ext_resource type="Texture2D" uid="uid://fspf2biiyfda" path="res://images/gg_colortough.png" id="4_p47bc"]
 
+[sub_resource type="AtlasTexture" id="AT_GA0"]
+atlas = ExtResource("3_lvxji")
+region = Rect2(0, 0, 32, 48)
+
+[sub_resource type="AtlasTexture" id="AT_GA1"]
+atlas = ExtResource("3_lvxji")
+region = Rect2(32, 0, 32, 48)
+
+[sub_resource type="AtlasTexture" id="AT_GA2"]
+atlas = ExtResource("3_lvxji")
+region = Rect2(64, 0, 32, 48)
+
+[sub_resource type="AtlasTexture" id="AT_GA3"]
+atlas = ExtResource("3_lvxji")
+region = Rect2(96, 0, 32, 48)
+
+[sub_resource type="AtlasTexture" id="AT_GH0"]
+atlas = ExtResource("3_lvxji")
+region = Rect2(384, 0, 32, 48)
+
+[sub_resource type="AtlasTexture" id="AT_GH1"]
+atlas = ExtResource("3_lvxji")
+region = Rect2(416, 0, 32, 48)
+
+[sub_resource type="AtlasTexture" id="AT_GH2"]
+atlas = ExtResource("3_lvxji")
+region = Rect2(448, 0, 32, 48)
+
+[sub_resource type="AtlasTexture" id="AT_GH3"]
+atlas = ExtResource("3_lvxji")
+region = Rect2(480, 0, 32, 48)
+
+[sub_resource type="AtlasTexture" id="AT_MA0"]
+atlas = ExtResource("3_lvxji")
+region = Rect2(128, 0, 32, 48)
+
+[sub_resource type="AtlasTexture" id="AT_MA1"]
+atlas = ExtResource("3_lvxji")
+region = Rect2(160, 0, 32, 48)
+
+[sub_resource type="AtlasTexture" id="AT_MA2"]
+atlas = ExtResource("3_lvxji")
+region = Rect2(192, 0, 32, 48)
+
+[sub_resource type="AtlasTexture" id="AT_MA3"]
+atlas = ExtResource("3_lvxji")
+region = Rect2(224, 0, 32, 48)
+
+[sub_resource type="AtlasTexture" id="AT_MH0"]
+atlas = ExtResource("3_lvxji")
+region = Rect2(256, 0, 32, 48)
+
+[sub_resource type="AtlasTexture" id="AT_MH1"]
+atlas = ExtResource("3_lvxji")
+region = Rect2(288, 0, 32, 48)
+
+[sub_resource type="AtlasTexture" id="AT_MH2"]
+atlas = ExtResource("3_lvxji")
+region = Rect2(320, 0, 32, 48)
+
+[sub_resource type="AtlasTexture" id="AT_MH3"]
+atlas = ExtResource("3_lvxji")
+region = Rect2(352, 0, 32, 48)
+
+[sub_resource type="SpriteFrames" id="ArmFrames"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AT_GA0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AT_GA1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AT_GA2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AT_GA3")
+}],
+"loop": false,
+"name": &"guns_action",
+"speed": 15.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AT_GH0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AT_GH1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AT_GH2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AT_GH3")
+}],
+"loop": false,
+"name": &"guns_hide",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AT_MA0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AT_MA1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AT_MA2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AT_MA3")
+}],
+"loop": true,
+"name": &"mop_action",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AT_MH0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AT_MH1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AT_MH2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AT_MH3")
+}],
+"loop": false,
+"name": &"mop_hide",
+"speed": 12.0
+}]
+
 [sub_resource type="CircleShape2D" id="PlayerShape"]
 radius = 16.0
 
@@ -16,13 +151,13 @@ collision_layer = 2
 script = ExtResource("1_player")
 bullet_scene = ExtResource("2_bullet")
 
-[node name="FacingSprite" type="Sprite2D" parent="." unique_id=248004449]
+[node name="FacingSprite" type="AnimatedSprite2D" parent="." unique_id=248004449]
 texture_filter = 5
 texture_repeat = 1
-position = Vector2(16, 0)
+position = Vector2(8, 0)
 rotation = 1.5707964
-texture = ExtResource("3_lvxji")
-hframes = 4
+sprite_frames = SubResource("ArmFrames")
+animation = &"guns_action"
 
 [node name="LegsSprite" type="Sprite2D" parent="." unique_id=858093557]
 texture_filter = 5
@@ -47,9 +182,9 @@ position = Vector2(21, 5)
 wait_time = 0.12
 one_shot = true
 
-[node name="InteractionArea" type="Area2D" parent="."]
+[node name="InteractionArea" type="Area2D" parent="." unique_id=146267581]
 collision_layer = 0
 collision_mask = 4
 
-[node name="InteractionShape" type="CollisionShape2D" parent="InteractionArea"]
+[node name="InteractionShape" type="CollisionShape2D" parent="InteractionArea" unique_id=554997975]
 shape = SubResource("InteractionShape")

@@ -23,7 +23,7 @@ const STATE_TRACKS: Dictionary = {
 	State.PRE_FIGHT: { drums=false, bass_groove=true,  bass_low=false, guitar_chords=false, guitar_notes=false },
 	State.FIGHT:     { drums=true,  bass_groove=true,  bass_low=false, guitar_chords=false, guitar_notes=false },
 	State.DIALOGUE:  { drums=false, bass_groove=true,  bass_low=false, guitar_chords=false, guitar_notes=true  },
-	State.CLEANUP:   { drums=true,  bass_groove=true,  bass_low=true,  guitar_chords=true,  guitar_notes=true  },
+	State.CLEANUP:   { drums=true,  bass_groove=false,  bass_low=true,  guitar_chords=true,  guitar_notes=true  },
 }
 
 @export var stream_drums:         AudioStream
