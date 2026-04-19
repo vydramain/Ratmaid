@@ -7,6 +7,17 @@ signal corpse_deposited
 
 func _ready() -> void:
 	deposit_area.body_entered.connect(_on_deposit_area_body_entered)
+	deactivate()
+
+
+func activate() -> void:
+	deposit_area.monitoring = true
+	deposit_area.monitorable = true
+
+
+func deactivate() -> void:
+	deposit_area.monitoring = false
+	deposit_area.monitorable = false
 
 
 func _on_deposit_area_body_entered(body: Node2D) -> void:

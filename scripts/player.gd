@@ -42,7 +42,6 @@ func _physics_process(delta: float) -> void:
 	if aim.length() > 0.001:
 		rotation = aim.angle()
 
-	_update_hands()
 	_update_legs(delta)
 
 	if not mop_mode and not _weapons_locked and carrying_corpse == null and Input.is_action_pressed("shoot") and $ShootCooldown.is_stopped():
@@ -131,10 +130,6 @@ func drop_corpse() -> void:
 		carrying_corpse.get_node("PickupArea").monitoring = true
 		carrying_corpse.get_node("PickupArea").monitorable = true
 	carrying_corpse = null
-
-
-func _update_hands() -> void:
-	pass
 
 
 func _update_legs(delta: float) -> void:

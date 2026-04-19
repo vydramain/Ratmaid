@@ -4,13 +4,14 @@ enum State { COMBAT, DIALOGUE, CLEANUP, WIN, LOSE_COMBAT, LOSE_EXIT, LOSE_TIMER 
 
 const CLEANUP_TIME := 60.0
 
-@export var trash_bin_scene: PackedScene
 @export var swat_scene: PackedScene
 
 @onready var hud: CanvasLayer = $HUD
 @onready var dialogue_box: CanvasLayer = $HUD/DialogueBox
 @onready var exit_door: Area2D = $"../ExitDoor"
 @onready var swat_spawn_points: Node2D = $"../SwatSpawnPoints"
+@onready var trash_bin: Node2D = $"../TrashBin"
+@onready var exit_arrow: Node2D = $"../ExitArrow"
 
 var current_state: State = State.COMBAT
 var enemies_alive := 0
@@ -18,7 +19,6 @@ var corpses_remaining := 0
 var blood_remaining := 0
 var cleanup_timer := 0.0
 var player: CharacterBody2D = null
-var _trash_bin: Node2D = null
 var _aggroed_enemies := 0
 var _swat_spawned := false
 
@@ -41,6 +41,10 @@ func _ready() -> void:
 
 	# Отключить ExitDoor до фазы уборки
 	exit_door.process_mode = Node.PROCESS_MODE_DISABLED
+
+	# Ящик для трупов заранее в сцене, включается в CLEANUP
+	trash_bin.deactivate()
+	trash_bin.corpse_deposited.connect(on_corpse_binned)
 
 	_enter_combat()
 
@@ -84,12 +88,9 @@ func _enter_cleanup() -> void:
 	exit_door.process_mode = Node.PROCESS_MODE_INHERIT
 	exit_door.body_entered.connect(on_exit_reached)
 
-	# Заспавнить мусорный ящик рядом с игроком
-	if trash_bin_scene != null and player != null:
-		_trash_bin = trash_bin_scene.instantiate()
-		_trash_bin.global_position = player.global_position + Vector2(-80, 0)
-		get_parent().add_child(_trash_bin)
-		_trash_bin.corpse_deposited.connect(on_corpse_binned)
+	# Включить ящик и стрелку-указатель
+	trash_bin.activate()
+	exit_arrow.activate(exit_door)
 
 
 func _enter_win() -> void:
