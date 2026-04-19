@@ -3,16 +3,18 @@ extends CharacterBody2D
 const SPEED := 80.0
 const AGGRO_RANGE := 300.0
 const SHOOT_COOLDOWN := 2.0
+const STEP_DISTANCE := 28.0
+const SCAN_SPEED := 1.0   # рад/с для осмотра в режиме idle
+const SCAN_SWEEP := 2.2   # угол поворота до смены направления (рад)
 
 signal enemy_died
-signal aggro_started   # враг входит в зону агро
-signal aggro_ended     # враг выходит из зоны агро (или умирает)
+signal aggro_started
+signal aggro_ended
 
 @export var corpse_scene: PackedScene
 @export var enemy_bullet_scene: PackedScene
 @export var blood_splatter_scene: PackedScene
-
-const STEP_DISTANCE := 28.0
+@export var is_idle: bool = false  # стоит на месте, крутит головой
 
 var direction := Vector2.ZERO
 var player_ref: CharacterBody2D = null
@@ -21,6 +23,8 @@ var _in_aggro := false
 var _is_shooting := false
 var _step_accum := 0.0
 var _next_leg_frame := 1
+var _scan_dir := 1.0
+var _scan_accum := 0.0
 
 @onready var muzzle := $Muzzle
 @onready var anim_sprite: AnimatedSprite2D = $FacingSprite
@@ -29,8 +33,11 @@ var _next_leg_frame := 1
 
 func _ready() -> void:
 	add_to_group("enemies")
-	$WanderTimer.timeout.connect(_pick_direction)
-	_pick_direction()
+	if is_idle:
+		$WanderTimer.stop()
+	else:
+		$WanderTimer.timeout.connect(_pick_direction)
+		_pick_direction()
 
 
 func _physics_process(delta: float) -> void:
@@ -40,23 +47,30 @@ func _physics_process(delta: float) -> void:
 		_update_legs(delta)
 		return
 
-	if player_ref != null and not player_ref.is_dead:
-		var dist := global_position.distance_to(player_ref.global_position)
-		if dist < AGGRO_RANGE:
-			if not _in_aggro:
-				_in_aggro = true
-				emit_signal("aggro_started")
-			# Преследовать игрока
-			direction = (player_ref.global_position - global_position).normalized()
-			_face_player()
-			shoot_timer += delta
-			if shoot_timer >= SHOOT_COOLDOWN:
-				shoot_timer = 0.0
-				_fire_at_player()
-		else:
-			if _in_aggro:
-				_in_aggro = false
-				emit_signal("aggro_ended")
+	if _can_see_player():
+		if not _in_aggro:
+			_in_aggro = true
+			emit_signal("aggro_started")
+		direction = (player_ref.global_position - global_position).normalized()
+		rotation = direction.angle()
+		shoot_timer += delta
+		if shoot_timer >= SHOOT_COOLDOWN:
+			shoot_timer = 0.0
+			_fire_at_player()
+	else:
+		if _in_aggro:
+			_in_aggro = false
+			emit_signal("aggro_ended")
+			if not is_idle:
+				_pick_direction()
+
+		if is_idle:
+			_do_scan(delta)
+			velocity = Vector2.ZERO
+			move_and_slide()
+			_update_legs(delta)
+			return
+
 	velocity = direction * SPEED
 	move_and_slide()
 	_update_legs(delta)
@@ -64,8 +78,28 @@ func _physics_process(delta: float) -> void:
 		_pick_direction()
 
 
-func _face_player() -> void:
-	rotation = (player_ref.global_position - global_position).angle()
+func _can_see_player() -> bool:
+	if player_ref == null or player_ref.is_dead:
+		return false
+	if global_position.distance_to(player_ref.global_position) > AGGRO_RANGE:
+		return false
+	var space := get_world_2d().direct_space_state
+	var query := PhysicsRayQueryParameters2D.create(
+		global_position,
+		player_ref.global_position,
+		1,        # маска: только стены (layer 1)
+		[get_rid()]
+	)
+	return get_world_2d().direct_space_state.intersect_ray(query).is_empty()
+
+
+func _do_scan(delta: float) -> void:
+	var step := SCAN_SPEED * _scan_dir * delta
+	rotation += step
+	_scan_accum += absf(step)
+	if _scan_accum >= SCAN_SWEEP:
+		_scan_accum = 0.0
+		_scan_dir *= -1.0
 
 
 func _fire_at_player() -> void:
