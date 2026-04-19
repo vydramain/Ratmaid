@@ -7,6 +7,9 @@ const STEP_DISTANCE := 36.0
 signal player_died
 
 @export var bullet_scene: PackedScene
+@export var casing_scene: PackedScene
+@export var blood_spray_scene: PackedScene
+@export var blood_splatter_scene: PackedScene
 
 @onready var facing_sprite: AnimatedSprite2D = $FacingSprite
 @onready var legs_sprite: Sprite2D = $LegsSprite
@@ -63,13 +66,35 @@ func _unhandled_input(event: InputEvent) -> void:
 		toggle_mop_mode()
 
 
-func die(_impulse: Vector2 = Vector2.ZERO) -> void:
+func die(impulse: Vector2 = Vector2.ZERO) -> void:
 	if is_dead:
 		return
 	is_dead = true
 	drop_corpse()
+	_spawn_death_blood(impulse)
 	emit_signal("player_died")
 	# TODO: заглушка — добавить анимацию смерти, когда будет спрайт
+
+
+func _spawn_death_blood(impulse: Vector2) -> void:
+	if blood_spray_scene != null:
+		var spray := blood_spray_scene.instantiate()
+		spray.global_position = global_position
+		if impulse.length() > 0.001:
+			spray.direction = impulse.normalized()
+		get_tree().current_scene.add_child(spray)
+	if blood_splatter_scene != null:
+		var configs: Array[Dictionary] = [
+			{"offset": Vector2.ZERO,    "radius": 26.0, "delay": 0.0},
+			{"offset": Vector2(10, -6), "radius": 18.0, "delay": 0.2},
+			{"offset": Vector2(-8, 8),  "radius": 21.0, "delay": 0.4},
+		]
+		for cfg in configs:
+			var splatter := blood_splatter_scene.instantiate()
+			splatter.global_position = global_position + cfg["offset"]
+			splatter.max_radius = cfg["radius"]
+			splatter.grow_delay = cfg["delay"]
+			get_tree().current_scene.add_child(splatter)
 
 
 func toggle_mop_mode() -> void:
@@ -112,6 +137,7 @@ func _on_guns_drawn() -> void:
 
 func try_interact() -> void:
 	if carrying_corpse != null:
+		drop_corpse()
 		return
 	# Corpse.PickupArea — это Area2D на layer 4; InteractionArea имеет mask 4
 	var area: Area2D = $InteractionArea
@@ -124,17 +150,9 @@ func try_interact() -> void:
 
 func pickup_corpse(corpse: Node2D) -> void:
 	carrying_corpse = corpse
-	if corpse.has_node("PickupArea"):
-		corpse.get_node("PickupArea").monitoring = false
-		corpse.get_node("PickupArea").monitorable = false
 
 
 func drop_corpse() -> void:
-	if carrying_corpse == null:
-		return
-	if carrying_corpse.has_node("PickupArea"):
-		carrying_corpse.get_node("PickupArea").monitoring = true
-		carrying_corpse.get_node("PickupArea").monitorable = true
 	carrying_corpse = null
 
 
@@ -154,12 +172,28 @@ func _update_legs(delta: float) -> void:
 func _shoot() -> void:
 	if bullet_scene == null:
 		return
-	var muzzle: Node2D = $MuzzleLeft if next_pistol == 0 else $MuzzleRight
+	var is_left := next_pistol == 0
+	var muzzle: Node2D = $MuzzleLeft if is_left else $MuzzleRight
 	var bullet := bullet_scene.instantiate()
 	bullet.global_position = muzzle.global_position
 	bullet.rotation = rotation
 	get_tree().current_scene.add_child(bullet)
+	_spawn_casing(muzzle, is_left)
 	next_pistol = 1 - next_pistol
 	$ShootCooldown.start()
 	facing_sprite.play("guns_action")
 	facing_sprite.animation_finished.connect(facing_sprite.stop, CONNECT_ONE_SHOT)
+
+
+func _spawn_casing(muzzle: Node2D, is_left: bool) -> void:
+	if casing_scene == null:
+		return
+	var casing := casing_scene.instantiate()
+	casing.global_position = muzzle.global_position
+	casing.rotation = rotation
+	# Гильза вылетает перпендикулярно дулу наружу (в сторону "плеча" пистолета)
+	var side := Vector2.UP.rotated(rotation) if is_left else Vector2.DOWN.rotated(rotation)
+	var velocity := side * randf_range(10.0, 20.0) + Vector2.LEFT.rotated(rotation) * randf_range(3.0, 8.0)
+	var spin := randf_range(8.0, 14.0) * (-1.0 if is_left else 1.0)
+	get_tree().current_scene.add_child(casing)
+	casing.launch(velocity, spin)

@@ -6,6 +6,8 @@
 [ext_resource type="PackedScene" uid="uid://dw8dreifn4hvc" path="res://scenes/props/blood_splatter.tscn" id="4_blood"]
 [ext_resource type="Texture2D" uid="uid://dljv0y6q0l1mb" path="res://images/en_moving.png" id="5_enmov"]
 [ext_resource type="Texture2D" uid="uid://cmmwec74bbvvl" path="res://images/en_guns_action.png" id="6_enguns"]
+[ext_resource type="PackedScene" uid="uid://dw8dkcyu1u0jc" path="res://scenes/props/blood_spray.tscn" id="7_spray"]
+[ext_resource type="PackedScene" uid="uid://ccasingenemy01" path="res://scenes/props/casing_enemy.tscn" id="8_casing"]
 
 [sub_resource type="AtlasTexture" id="AT_GA0"]
 atlas = ExtResource("6_enguns")
@@ -53,6 +55,8 @@ script = ExtResource("1_enemy")
 corpse_scene = ExtResource("2_corpse")
 enemy_bullet_scene = ExtResource("3_ebullet")
 blood_splatter_scene = ExtResource("4_blood")
+blood_spray_scene = ExtResource("7_spray")
+casing_scene = ExtResource("8_casing")
 
 [node name="FacingSprite" type="AnimatedSprite2D" parent="." unique_id=114559728]
 texture_filter = 5
@@ -79,3 +83,6 @@ autostart = true
 
 [node name="Muzzle" type="Marker2D" parent="." unique_id=621970338]
 position = Vector2(18, 0)
+
+[node name="ActivationNotifier" type="VisibleOnScreenNotifier2D" parent="." unique_id=1712994001]
+rect = Rect2(-50, -50, 100, 100)

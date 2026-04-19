@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://dw8dkcyu1u0jc"]
+
+[ext_resource type="Script" path="res://scripts/blood_spray.gd" id="1_spray"]
+
+[node name="BloodSpray" type="CPUParticles2D"]
+emitting = false
+amount = 30
+lifetime = 0.5
+one_shot = true
+explosiveness = 1.0
+local_coords = false
+z_index = 2
+direction = Vector2(1, 0)
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 50.0
+initial_velocity_max = 80.0
+scale_amount_min = 1.0
+scale_amount_max = 2.0
+color = Color(0.72, 0.05, 0.05, 1)
+script = ExtResource("1_spray")

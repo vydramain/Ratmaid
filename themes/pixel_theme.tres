@@ -1,11 +1,10 @@
-[gd_resource type="Theme" format=3 uid="uid://dpu5t63c2roks"]
+[gd_resource type="Theme" format=3 uid="uid://c5154om104xag"]
 
 [sub_resource type="SystemFont" id="SystemFont_pixel"]
 font_names = PackedStringArray("monospace")
 antialiasing = 0
 hinting = 0
 subpixel_positioning = 0
-multichannel_signed_distance_field = false
 
 [resource]
 default_font = SubResource("SystemFont_pixel")

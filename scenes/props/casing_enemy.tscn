@@ -1,0 +1,50 @@
+[gd_scene format=3 uid="uid://pgt1ft37y8ea"]
+
+[ext_resource type="Script" uid="uid://cat6n6psms7re" path="res://scripts/casing.gd" id="1_casing"]
+[ext_resource type="Texture2D" uid="uid://b7x3vsx8v6k3x" path="res://images/ft_cartridge_case_enemy.png" id="2_mctun"]
+
+[sub_resource type="PhysicsMaterial" id="CasingPhys"]
+friction = 0.9
+bounce = 0.25
+
+[sub_resource type="RectangleShape2D" id="CasingShape"]
+size = Vector2(4, 6)
+
+[sub_resource type="RectangleShape2D" id="CleanupShape"]
+size = Vector2(8, 6)
+
+[node name="CasingEnemy" type="RigidBody2D" unique_id=1231108523]
+collision_layer = 0
+collision_mask = 129
+physics_material_override = SubResource("CasingPhys")
+gravity_scale = 0.0
+linear_damp = 6.0
+angular_damp = 2.0
+script = ExtResource("1_casing")
+
+[node name="Placeholder" type="ColorRect" parent="." unique_id=1598253185]
+visible = false
+offset_left = -2.0
+offset_top = -1.0
+offset_right = 2.0
+offset_bottom = 1.0
+color = Color(0.7, 0.55, 0.1, 1)
+
+[node name="Sprite" type="Sprite2D" parent="." unique_id=795881333]
+texture_filter = 5
+texture_repeat = 1
+position = Vector2(-2.9802322e-08, 8.940697e-08)
+rotation = 1.5707964
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_mctun")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1083731190]
+position = Vector2(-1, 0)
+shape = SubResource("CasingShape")
+
+[node name="CleanupArea" type="Area2D" parent="." unique_id=1717115365]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CleanupShape" type="CollisionShape2D" parent="CleanupArea" unique_id=1018501949]
+shape = SubResource("CleanupShape")

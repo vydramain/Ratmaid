@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://betxn1uoih7x3" path="res://images/ft_bullet.png" id="2_83itf"]
 
 [sub_resource type="RectangleShape2D" id="BulletShape"]
-size = Vector2(10, 4)
+size = Vector2(6, 4)
 
 [node name="Bullet" type="Area2D" unique_id=1968277949]
 collision_layer = 8
@@ -15,10 +15,11 @@ script = ExtResource("1_bullet")
 texture_filter = 5
 texture_repeat = 1
 rotation = 1.5707964
-scale = Vector2(0.75, 0.75)
+scale = Vector2(0.5, 0.5)
 texture = ExtResource("2_83itf")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1256657588]
+position = Vector2(1, 0)
 shape = SubResource("BulletShape")
 
 [node name="Lifetime" type="Timer" parent="." unique_id=1040534377]

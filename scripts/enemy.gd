@@ -2,7 +2,7 @@ extends CharacterBody2D
 
 const SPEED := 80.0
 const AGGRO_RANGE := 300.0
-const SHOOT_COOLDOWN := 2.0
+const SHOOT_COOLDOWN := 1.8
 const STEP_DISTANCE := 28.0
 const SCAN_SPEED := 1.0   # рад/с для осмотра в режиме idle
 const SCAN_SWEEP := 2.2   # угол поворота до смены направления (рад)
@@ -16,6 +16,8 @@ signal aggro_ended
 @export var corpse_scene: PackedScene
 @export var enemy_bullet_scene: PackedScene
 @export var blood_splatter_scene: PackedScene
+@export var blood_spray_scene: PackedScene
+@export var casing_scene: PackedScene
 @export var is_idle: bool = false  # стоит на месте, крутит головой
 
 var direction := Vector2.ZERO
@@ -29,6 +31,7 @@ var _scan_dir := 1.0
 var _scan_accum := 0.0
 var _sidestep_dir := Vector2.ZERO
 var _sidestep_timer := 0.0
+var _on_screen := true
 
 @onready var muzzle := $Muzzle
 @onready var anim_sprite: AnimatedSprite2D = $FacingSprite
@@ -38,13 +41,26 @@ var _sidestep_timer := 0.0
 func _ready() -> void:
 	add_to_group("enemies")
 	$WanderTimer.timeout.connect(_pick_direction)
+	var notifier: VisibleOnScreenNotifier2D = $ActivationNotifier
+	notifier.screen_entered.connect(_on_screen_entered)
+	notifier.screen_exited.connect(_on_screen_exited)
 	if is_idle:
 		$WanderTimer.stop()
 	else:
 		_pick_direction()
 
 
+func _on_screen_entered() -> void:
+	_on_screen = true
+
+
+func _on_screen_exited() -> void:
+	_on_screen = false
+
+
 func _physics_process(delta: float) -> void:
+	if not _on_screen:
+		return
 	if _is_shooting:
 		velocity = Vector2.ZERO
 		move_and_slide()
@@ -146,6 +162,20 @@ func _on_guns_frame_changed() -> void:
 		bullet.global_position = muzzle.global_position
 		bullet.direction = (player_ref.global_position - muzzle.global_position).normalized()
 		get_tree().current_scene.add_child(bullet)
+		_spawn_casing()
+
+
+func _spawn_casing() -> void:
+	if casing_scene == null:
+		return
+	var casing := casing_scene.instantiate()
+	casing.global_position = muzzle.global_position
+	casing.rotation = rotation
+	var side := Vector2.UP.rotated(rotation)
+	var velocity := side * randf_range(10.0, 20.0) + Vector2.LEFT.rotated(rotation) * randf_range(3.0, 8.0)
+	var spin := randf_range(8.0, 14.0)
+	get_tree().current_scene.add_child(casing)
+	casing.launch(velocity, spin)
 
 
 func _on_guns_finished() -> void:
@@ -177,6 +207,12 @@ func die(impulse: Vector2 = Vector2.ZERO) -> void:
 	if _in_aggro:
 		_in_aggro = false
 		emit_signal("aggro_ended")
+	if blood_spray_scene != null:
+		var spray := blood_spray_scene.instantiate()
+		spray.global_position = global_position
+		if impulse.length() > 0.001:
+			spray.direction = impulse.normalized()
+		get_parent().add_child(spray)
 	if corpse_scene != null:
 		var corpse := corpse_scene.instantiate()
 		corpse.global_position = global_position

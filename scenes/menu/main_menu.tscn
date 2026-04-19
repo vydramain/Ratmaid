@@ -36,42 +36,41 @@ alignment = 1
 [node name="Title" type="Label" parent="Panel/VBox" unique_id=1859878982]
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_font_sizes/font_size = 72
-text = "RATMAID"
+theme_override_font_sizes/font_size = 40
+text = "Bottom-Down Maid"
 horizontal_alignment = 1
 
 [node name="Subtitle" type="Label" parent="Panel/VBox" unique_id=121065079]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 1)
-theme_override_font_sizes/font_size = 18
-text = "You know what prototype"
+theme_override_font_sizes/font_size = 14
+text = "Intercept the signal"
 horizontal_alignment = 1
-
-[node name="Spacer" type="Control" parent="Panel/VBox" unique_id=118925767]
-custom_minimum_size = Vector2(0, 20)
-layout_mode = 2
 
 [node name="StartButton" type="Button" parent="Panel/VBox" unique_id=1292835872]
 custom_minimum_size = Vector2(220, 48)
 layout_mode = 2
 size_flags_horizontal = 4
-focus_mode = 2
 text = "Start"
 
 [node name="QuitButton" type="Button" parent="Panel/VBox" unique_id=481389910]
 custom_minimum_size = Vector2(220, 48)
 layout_mode = 2
 size_flags_horizontal = 4
-focus_mode = 2
 text = "Quit"
 
 [node name="LangButton" type="Button" parent="Panel/VBox" unique_id=481389911]
 custom_minimum_size = Vector2(220, 48)
 layout_mode = 2
 size_flags_horizontal = 4
-focus_mode = 2
 text = "[ RU ]"
+
+[node name="DifficultyButton" type="Button" parent="Panel/VBox" unique_id=481389913]
+custom_minimum_size = Vector2(220, 48)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "[ NORMAL ]"
 
 [node name="BlackFade" type="ColorRect" parent="." unique_id=481389912]
 layout_mode = 1

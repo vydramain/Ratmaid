@@ -36,7 +36,7 @@ func _draw() -> void:
 
 
 func _on_body_entered(body: Node2D) -> void:
-	if body.is_in_group("player") and body.mop_mode:
+	if body.is_in_group("player") and body.mop_mode and not body.is_dead:
 		clean()
 
 

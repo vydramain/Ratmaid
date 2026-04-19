@@ -2,7 +2,7 @@ extends CharacterBody2D
 
 const SPEED := 120.0
 const STEP_DISTANCE := 28.0
-const SHOOT_COOLDOWN := 1.2
+const SHOOT_COOLDOWN := 1.0
 
 var player_ref: CharacterBody2D = null
 var _step_accum := 0.0

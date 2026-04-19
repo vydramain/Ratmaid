@@ -1,6 +1,10 @@
 keys,ru,en
+menu.title,Bottom-Down Maid,Bottom-Down Maid
+menu.subtitle,Перехвати сигнал,Intercept the signal
 menu.start,Начать,Start
 menu.quit,Выход,Quit
+difficulty.normal,ОБЫЧНАЯ,NORMAL
+difficulty.hard,СЛОЖНАЯ,HARD
 hud.mode.guns,[ ПИСТОЛЕТЫ ],[ GUNS ]
 hud.mode.mop,[ ШВАБРА ],[ MOP ]
 hud.hint.pickup,Взять труп,Pick up body

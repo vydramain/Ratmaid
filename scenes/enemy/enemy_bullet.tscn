@@ -13,7 +13,6 @@ script = ExtResource("1_ebullet")
 texture_filter = 5
 texture_repeat = 1
 rotation = 1.5707964
-scale = Vector2(0.7, 0.7)
 texture = ExtResource("2_bkamy")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1088532875]

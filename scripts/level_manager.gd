@@ -2,7 +2,8 @@ extends Node
 
 enum State { INTRO, COMBAT, DIALOGUE, CLEANUP, WIN, LOSE_COMBAT, LOSE_EXIT, LOSE_TIMER }
 
-const CLEANUP_TIME := 30.0
+const CLEANUP_TIME_NORMAL := 40.0
+const CLEANUP_TIME_HARD := 35.0
 
 @export var swat_scene: PackedScene
 
@@ -17,6 +18,7 @@ var current_state: State = State.INTRO
 var enemies_alive := 0
 var corpses_remaining := 0
 var blood_remaining := 0
+var casings_remaining := 0
 var cleanup_timer := 0.0
 var player: CharacterBody2D = null
 var _aggroed_enemies := 0
@@ -25,6 +27,7 @@ var _swat_spawned := false
 
 func _ready() -> void:
 	add_to_group("level_manager")
+	Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
 	# Найти игрока
 	var players := get_tree().get_nodes_in_group("player")
 	if players.size() > 0:
@@ -97,8 +100,9 @@ func _enter_cleanup() -> void:
 	MusicManager.set_state(MusicManager.State.CLEANUP)
 	if player != null:
 		player.input_locked = false
-	cleanup_timer = CLEANUP_TIME
-	hud.show_timer(CLEANUP_TIME)
+	var cleanup_time := CLEANUP_TIME_HARD if Settings.difficulty == "hard" else CLEANUP_TIME_NORMAL
+	cleanup_timer = cleanup_time
+	hud.show_timer(cleanup_time)
 	hud.show_mode(false)
 	hud.set_hints([["interact", "hud.hint.pickup"], ["toggle_mop", "hud.hint.toggle_mop"]])
 
@@ -161,7 +165,10 @@ func on_dialogue_dismissed() -> void:
 func on_exit_reached(body: Node2D) -> void:
 	if not body.is_in_group("player"):
 		return
-	if corpses_remaining > 0 or blood_remaining > 0:
+	var dirty := corpses_remaining > 0 or blood_remaining > 0
+	if Settings.difficulty == "hard":
+		dirty = dirty or casings_remaining > 0
+	if dirty:
 		_enter_lose(State.LOSE_EXIT)
 	else:
 		_enter_win()
@@ -181,6 +188,15 @@ func on_blood_cleaned() -> void:
 
 func register_blood_splatter(splatter: Area2D) -> void:
 	splatter.cleaned.connect(on_blood_cleaned)
+
+
+func register_casing(casing: Node) -> void:
+	casings_remaining += 1
+	casing.cleaned.connect(on_casing_cleaned)
+
+
+func on_casing_cleaned() -> void:
+	casings_remaining = max(0, casings_remaining - 1)
 
 
 func _check_cleanup_hint() -> void:
