@@ -18,10 +18,10 @@ var _is_shooting := false
 
 
 func _ready() -> void:
-	# layer 6 (bitmask 32) = swat; mask: walls (1) + player (2) = 3
+	# layer 6 (bitmask 32) = swat; mask: walls (1) + player (2) + furniture (128) = 131
 	# Пули игрока (bitmask 8) НЕ входят в маску — отлетают
 	collision_layer = 32
-	collision_mask = 3
+	collision_mask = 131
 	add_to_group("swat")
 
 

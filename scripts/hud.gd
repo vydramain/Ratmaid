@@ -8,7 +8,7 @@ extends CanvasLayer
 @onready var hints_bar: Label = $HintsBar
 
 var _showing_result := false
-var _active_hints: Array = []   # [["action", "описание"], ...]
+var _active_hints: Array = []   # [["action", "hint_key"], ...]
 
 
 func _ready() -> void:
@@ -38,12 +38,11 @@ func hide_timer() -> void:
 
 func show_mode(is_mop: bool) -> void:
 	mode_label.visible = true
-	mode_label.text = "[ ШВАБРА ]" if is_mop else "[ ПИСТОЛЕТЫ ]"
+	mode_label.text = tr("hud.mode.mop") if is_mop else tr("hud.mode.guns")
 
 
-## Устанавливает подсказки внизу экрана.
-## hints — массив пар: [["action_name", "описание"], ...]
-## Пример: [["interact", "Взять труп"], ["toggle_mop", "Швабра"]]
+## hints — массив пар: [["action_name", "hint_key"], ...]
+## Пример: [["interact", "hud.hint.pickup"], ["toggle_mop", "hud.hint.toggle_mop"]]
 func set_hints(hints: Array) -> void:
 	_active_hints = hints
 	_refresh_all_hints()
@@ -61,13 +60,12 @@ func _refresh_all_hints() -> void:
 	var parts: Array = []
 	for pair in _active_hints:
 		var action: String = pair[0]
-		var desc: String   = pair[1]
-		parts.append("%s %s" % [InputDevice.get_hint_text(action), desc])
+		var key: String   = pair[1]
+		parts.append("%s %s" % [InputDevice.get_hint_text(action), tr(key)])
 	hints_bar.text = "   ".join(parts)
 	hints_bar.visible = true
-	# Обновить кнопку на экране результата, если он показан
 	if _showing_result:
-		result_hint.text = "%s Вернуться в меню" % InputDevice.get_hint_text("ui_accept")
+		result_hint.text = "%s %s" % [InputDevice.get_hint_text("ui_accept"), tr("hud.hint.return")]
 
 
 func show_gameover(reason: String) -> void:
@@ -75,21 +73,25 @@ func show_gameover(reason: String) -> void:
 	result_panel.visible = true
 	match reason:
 		"combat":
-			result_label.text = "ВЫ УБИТЫ"
+			result_label.text = tr("result.dead")
 		"exit_early":
-			result_label.text = "Полицейские нашли улики и арестовали тебя."
+			result_label.text = tr("result.exit_early")
 		"timer":
-			result_label.text = "Спецназ окружил здание. Тебя убили при задержании."
+			result_label.text = tr("result.timer")
 		_:
-			result_label.text = "GAME OVER"
-	result_hint.text = "%s Вернуться в меню" % InputDevice.get_hint_text("ui_accept")
+			result_label.text = tr("result.dead")
+	result_hint.text = "%s %s" % [InputDevice.get_hint_text("ui_accept"), tr("hud.hint.return")]
 
 
 func show_victory() -> void:
 	_showing_result = true
 	result_panel.visible = true
-	result_label.text = "МИССИЯ ВЫПОЛНЕНА\n\nАгент докладывает: задание выполнено. Улики уничтожены.\nТеррористический сигнал нейтрализован."
-	result_hint.text = "%s Вернуться в меню" % InputDevice.get_hint_text("ui_accept")
+	result_label.text = "%s\n\n%s\n%s" % [
+		tr("result.victory.title"),
+		tr("result.victory.body"),
+		tr("result.victory.outro"),
+	]
+	result_hint.text = "%s %s" % [InputDevice.get_hint_text("ui_accept"), tr("hud.hint.return")]
 
 
 func _unhandled_input(event: InputEvent) -> void:

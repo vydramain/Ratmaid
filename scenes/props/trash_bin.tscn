@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://ctrashbin0001"]
+[gd_scene load_steps=5 format=3 uid="uid://ctrashbin0001"]
 
 [ext_resource type="Script" path="res://scripts/trash_bin.gd" id="1_bin"]
 [ext_resource type="Texture2D" uid="uid://dl4yu2bkalav2" path="res://images/fr_corpse_bucket.png" id="2_bucket"]
@@ -6,11 +6,21 @@
 [sub_resource type="CircleShape2D" id="DepositShape"]
 radius = 48.0
 
+[sub_resource type="CircleShape2D" id="BodyShape"]
+radius = 12.0
+
 [node name="TrashBin" type="Node2D"]
 script = ExtResource("1_bin")
 
 [node name="Sprite" type="Sprite2D" parent="."]
 texture = ExtResource("2_bucket")
+
+[node name="Body" type="StaticBody2D" parent="."]
+collision_layer = 128
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Body"]
+shape = SubResource("BodyShape")
 
 [node name="DepositArea" type="Area2D" parent="."]
 collision_layer = 0

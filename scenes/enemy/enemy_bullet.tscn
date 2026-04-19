@@ -1,23 +1,24 @@
 [gd_scene format=3 uid="uid://da6g4x0d68d2o"]
 
-[ext_resource type="Script" path="res://scripts/enemy_bullet.gd" id="1_ebullet"]
+[ext_resource type="Script" uid="uid://tkbportghpwt" path="res://scripts/enemy_bullet.gd" id="1_ebullet"]
+[ext_resource type="Texture2D" uid="uid://05qmxknphlx7" path="res://images/ft_bullet_enemy.png" id="2_bkamy"]
 
 [sub_resource type="RectangleShape2D" id="BulletShape"]
 size = Vector2(8, 4)
 
-[node name="EnemyBullet" type="Area2D"]
+[node name="EnemyBullet" type="Area2D" unique_id=1101946651]
 script = ExtResource("1_ebullet")
 
-[node name="Sprite" type="ColorRect" parent="."]
-offset_left = -4.0
-offset_top = -2.0
-offset_right = 4.0
-offset_bottom = 2.0
-color = Color(1, 0.3, 0.1, 1)
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=817194544]
+texture_filter = 5
+texture_repeat = 1
+rotation = 1.5707964
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("2_bkamy")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1088532875]
 shape = SubResource("BulletShape")
 
-[node name="Lifetime" type="Timer" parent="."]
+[node name="Lifetime" type="Timer" parent="." unique_id=1078120181]
 wait_time = 1.5
 one_shot = true

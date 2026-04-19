@@ -1,0 +1,21 @@
+keys,ru,en
+menu.start,Начать,Start
+menu.quit,Выход,Quit
+hud.mode.guns,[ ПИСТОЛЕТЫ ],[ GUNS ]
+hud.mode.mop,[ ШВАБРА ],[ MOP ]
+hud.hint.pickup,Взять труп,Pick up body
+hud.hint.toggle_mop,Швабра/Пистолет,Mop/Guns
+hud.hint.return,Вернуться в меню,Back to menu
+hud.hint.skip,пропустить,skip
+hud.hint.continue,продолжить,continue
+result.dead,ВЫ УБИТЫ,YOU ARE DEAD
+result.exit_early,Полицейские нашли улики и арестовали тебя.,The cops found the evidence and arrested you.
+result.timer,Спецназ окружил здание. Тебя убили при задержании.,"SWAT surrounded the building. You were killed during the raid."
+result.victory.title,МИССИЯ ВЫПОЛНЕНА,MISSION COMPLETE
+result.victory.body,Горничная докладывает: задание выполнено. Улики уничтожены.,Maid reports: job done. Evidence destroyed.
+result.victory.outro,Террористический СИГНАЛ нейтрализован.,The terror SIGNAL is neutralized.
+speaker.signal,Перехваченный СИГНАЛ,Intercepted SIGNAL
+speaker.maid,Горничная,Maid
+dialogue.intro.maid,"Я получила СИГНАЛ о том, что мне необходимо ПРИБРАТЬСЯ здесь.","I got a SIGNAL that I need to CLEAR OUT here."
+dialogue.after_fight.signal,"Поступил СИГНАЛ о том, что в придорожном кафе произошла перестрелка. Есть пострадавшие. Всем свободным отрядам спецназа срочно отправиться на место происшествия.","A SIGNAL came in: a shooting at a roadside diner. Casualties reported. All available SWAT units, deploy immediately."
+dialogue.after_fight.maid,"Чёрт, надо срочно УБИРАТЬСЯ.","Damn, gotta CLEAR OUT fast."

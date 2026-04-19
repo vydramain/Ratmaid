@@ -11,6 +11,7 @@ enum State {
 	DIALOGUE,
 	CLEANUP,
 	RESULT,   # Победа / поражение — замораживает текущий микс
+	SILENT,   # Плавно гасит все стемы (для переходов между сценами)
 }
 
 const FADE_TIME   := 0.25   # секунд на fade
@@ -24,6 +25,7 @@ const STATE_TRACKS: Dictionary = {
 	State.FIGHT:     { drums=true,  bass_groove=true,  bass_low=false, guitar_chords=false, guitar_notes=false },
 	State.DIALOGUE:  { drums=false, bass_groove=true,  bass_low=false, guitar_chords=false, guitar_notes=true  },
 	State.CLEANUP:   { drums=true,  bass_groove=false,  bass_low=true,  guitar_chords=true,  guitar_notes=true  },
+	State.SILENT:    { drums=false, bass_groove=false, bass_low=false, guitar_chords=false, guitar_notes=false },
 }
 
 @export var stream_drums:         AudioStream

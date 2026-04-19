@@ -28,3 +28,7 @@ autowrap_mode = 3
 layout_mode = 2
 horizontal_alignment = 2
 text = "[Enter] продолжить"
+
+[node name="TypeSfxSignal" type="AudioStreamPlayer" parent="."]
+
+[node name="TypeSfxMaid" type="AudioStreamPlayer" parent="."]

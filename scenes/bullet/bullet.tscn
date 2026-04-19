@@ -1,26 +1,27 @@
-[gd_scene load_steps=3 format=3 uid="uid://cbullet0ratmaid1"]
+[gd_scene format=3 uid="uid://c0iuqrq6c0qbw"]
 
-[ext_resource type="Script" path="res://scripts/bullet.gd" id="1_bullet"]
+[ext_resource type="Script" uid="uid://1gt2rhylmbum" path="res://scripts/bullet.gd" id="1_bullet"]
+[ext_resource type="Texture2D" uid="uid://betxn1uoih7x3" path="res://images/ft_bullet.png" id="2_83itf"]
 
 [sub_resource type="RectangleShape2D" id="BulletShape"]
 size = Vector2(10, 4)
 
-[node name="Bullet" type="Area2D"]
+[node name="Bullet" type="Area2D" unique_id=1968277949]
 collision_layer = 8
 collision_mask = 5
 script = ExtResource("1_bullet")
 
-[node name="Sprite" type="ColorRect" parent="."]
-offset_left = -5.0
-offset_top = -2.0
-offset_right = 5.0
-offset_bottom = 2.0
-color = Color(1, 0.85, 0.2, 1)
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=996573138]
+texture_filter = 5
+texture_repeat = 1
+rotation = 1.5707964
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("2_83itf")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1256657588]
 shape = SubResource("BulletShape")
 
-[node name="Lifetime" type="Timer" parent="."]
+[node name="Lifetime" type="Timer" parent="." unique_id=1040534377]
 wait_time = 1.5
 one_shot = true
 autostart = true

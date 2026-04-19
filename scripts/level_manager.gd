@@ -1,8 +1,8 @@
 extends Node
 
-enum State { COMBAT, DIALOGUE, CLEANUP, WIN, LOSE_COMBAT, LOSE_EXIT, LOSE_TIMER }
+enum State { INTRO, COMBAT, DIALOGUE, CLEANUP, WIN, LOSE_COMBAT, LOSE_EXIT, LOSE_TIMER }
 
-const CLEANUP_TIME := 60.0
+const CLEANUP_TIME := 30.0
 
 @export var swat_scene: PackedScene
 
@@ -13,7 +13,7 @@ const CLEANUP_TIME := 60.0
 @onready var trash_bin: Node2D = $"../TrashBin"
 @onready var exit_arrow: Node2D = $"../ExitArrow"
 
-var current_state: State = State.COMBAT
+var current_state: State = State.INTRO
 var enemies_alive := 0
 var corpses_remaining := 0
 var blood_remaining := 0
@@ -31,12 +31,13 @@ func _ready() -> void:
 		player = players[0]
 		player.player_died.connect(on_player_died)
 
-	# Назначить ссылку на игрока врагам и посчитать их
+	# Назначить ссылку на игрока врагам, посчитать и заморозить до старта боя
 	for enemy in get_tree().get_nodes_in_group("enemies"):
 		enemy.player_ref = player
 		enemy.enemy_died.connect(on_enemy_died)
 		enemy.aggro_started.connect(_on_aggro_started)
 		enemy.aggro_ended.connect(_on_aggro_ended)
+		enemy.process_mode = Node.PROCESS_MODE_DISABLED
 		enemies_alive += 1
 
 	# Отключить ExitDoor до фазы уборки
@@ -46,7 +47,7 @@ func _ready() -> void:
 	trash_bin.deactivate()
 	trash_bin.corpse_deposited.connect(on_corpse_binned)
 
-	_enter_combat()
+	_enter_intro_dialogue()
 
 
 func _process(delta: float) -> void:
@@ -64,25 +65,42 @@ func _process(delta: float) -> void:
 
 # ─── Переходы состояний ───────────────────────────────────────────────────────
 
+func _enter_intro_dialogue() -> void:
+	current_state = State.INTRO
+	MusicManager.set_state(MusicManager.State.PRE_FIGHT)
+	if player != null:
+		player.input_locked = true
+	dialogue_box.dialogue_finished.connect(on_intro_dismissed, CONNECT_ONE_SHOT)
+	dialogue_box.start_dialogue("intro")
+
+
 func _enter_combat() -> void:
 	current_state = State.COMBAT
 	MusicManager.set_state(MusicManager.State.PRE_FIGHT)
+	if player != null:
+		player.input_locked = false
+	for enemy in get_tree().get_nodes_in_group("enemies"):
+		enemy.process_mode = Node.PROCESS_MODE_INHERIT
 
 
 func _enter_dialogue() -> void:
 	current_state = State.DIALOGUE
 	MusicManager.set_state(MusicManager.State.DIALOGUE)
-	dialogue_box.start_dialogue()
+	if player != null:
+		player.input_locked = true
 	dialogue_box.dialogue_finished.connect(on_dialogue_dismissed, CONNECT_ONE_SHOT)
+	dialogue_box.start_dialogue("after_fight")
 
 
 func _enter_cleanup() -> void:
 	current_state = State.CLEANUP
 	MusicManager.set_state(MusicManager.State.CLEANUP)
+	if player != null:
+		player.input_locked = false
 	cleanup_timer = CLEANUP_TIME
 	hud.show_timer(CLEANUP_TIME)
 	hud.show_mode(false)
-	hud.set_hints([["interact", "Взять труп"], ["toggle_mop", "Швабра/Пистолет"]])
+	hud.set_hints([["interact", "hud.hint.pickup"], ["toggle_mop", "hud.hint.toggle_mop"]])
 
 	# Активировать выход
 	exit_door.process_mode = Node.PROCESS_MODE_INHERIT
@@ -130,6 +148,10 @@ func on_player_died() -> void:
 		_enter_lose(State.LOSE_COMBAT)
 	else:
 		_enter_lose(State.LOSE_TIMER)
+
+
+func on_intro_dismissed() -> void:
+	_enter_combat()
 
 
 func on_dialogue_dismissed() -> void:

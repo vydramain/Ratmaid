@@ -6,6 +6,8 @@ const SHOOT_COOLDOWN := 2.0
 const STEP_DISTANCE := 28.0
 const SCAN_SPEED := 1.0   # рад/с для осмотра в режиме idle
 const SCAN_SWEEP := 2.2   # угол поворота до смены направления (рад)
+const SIDESTEP_TIME := 0.35
+const SIDESTEP_ANGLE := PI / 3.0
 
 signal enemy_died
 signal aggro_started
@@ -25,6 +27,8 @@ var _step_accum := 0.0
 var _next_leg_frame := 1
 var _scan_dir := 1.0
 var _scan_accum := 0.0
+var _sidestep_dir := Vector2.ZERO
+var _sidestep_timer := 0.0
 
 @onready var muzzle := $Muzzle
 @onready var anim_sprite: AnimatedSprite2D = $FacingSprite
@@ -33,10 +37,10 @@ var _scan_accum := 0.0
 
 func _ready() -> void:
 	add_to_group("enemies")
+	$WanderTimer.timeout.connect(_pick_direction)
 	if is_idle:
 		$WanderTimer.stop()
 	else:
-		$WanderTimer.timeout.connect(_pick_direction)
 		_pick_direction()
 
 
@@ -51,8 +55,17 @@ func _physics_process(delta: float) -> void:
 		if not _in_aggro:
 			_in_aggro = true
 			emit_signal("aggro_started")
-		direction = (player_ref.global_position - global_position).normalized()
-		rotation = direction.angle()
+			# Idle-враг после первого обнаружения становится полноценным преследователем
+			if is_idle:
+				is_idle = false
+				$WanderTimer.start()
+		var to_player := (player_ref.global_position - global_position).normalized()
+		rotation = to_player.angle()
+		if _sidestep_timer > 0.0:
+			_sidestep_timer -= delta
+			direction = _sidestep_dir
+		else:
+			direction = to_player
 		shoot_timer += delta
 		if shoot_timer >= SHOOT_COOLDOWN:
 			shoot_timer = 0.0
@@ -61,8 +74,8 @@ func _physics_process(delta: float) -> void:
 		if _in_aggro:
 			_in_aggro = false
 			emit_signal("aggro_ended")
-			if not is_idle:
-				_pick_direction()
+			_sidestep_timer = 0.0
+			_pick_direction()
 
 		if is_idle:
 			_do_scan(delta)
@@ -74,8 +87,21 @@ func _physics_process(delta: float) -> void:
 	velocity = direction * SPEED
 	move_and_slide()
 	_update_legs(delta)
-	if get_slide_collision_count() > 0 and not _in_aggro:
-		_pick_direction()
+	if get_slide_collision_count() > 0:
+		if _in_aggro:
+			_start_sidestep()
+		else:
+			_pick_direction()
+
+
+func _start_sidestep() -> void:
+	var to_player := (player_ref.global_position - global_position).normalized()
+	var normal := get_slide_collision(0).get_normal()
+	var side := signf(to_player.cross(normal))
+	if side == 0.0:
+		side = 1.0
+	_sidestep_dir = to_player.rotated(side * SIDESTEP_ANGLE)
+	_sidestep_timer = SIDESTEP_TIME
 
 
 func _can_see_player() -> bool:

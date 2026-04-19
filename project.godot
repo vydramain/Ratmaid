@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 
 MusicManager="*res://scenes/music/music_manager.tscn"
 InputDevice="*res://scripts/input_device_tracker.gd"
+Settings="*res://scripts/settings_store.gd"
 
 [display]
 
@@ -26,6 +27,14 @@ window/size/viewport_width=1200
 window/size/viewport_height=800
 window/stretch/mode="viewport"
 window/stretch/scale=2.0
+
+[gui]
+
+theme/custom="res://themes/pixel_theme.tres"
+
+[internationalization]
+
+locale/translations=PackedStringArray("res://localization/strings.en.translation", "res://localization/strings.ru.translation")
 
 [input]
 
@@ -107,6 +116,7 @@ toggle_mop={
 2d_physics/layer_5="enemy_bullets"
 2d_physics/layer_6="swat"
 2d_physics/layer_7="blood"
+2d_physics/layer_8="furniture"
 
 [physics]
 

@@ -18,6 +18,7 @@ var step_accum := 0.0
 var is_dead := false
 var mop_mode := false
 var carrying_corpse: Node2D = null
+var input_locked := false
 var _weapons_locked := false
 
 
@@ -31,6 +32,11 @@ func _physics_process(delta: float) -> void:
 
 	if carrying_corpse != null:
 		carrying_corpse.global_position = global_position + Vector2(0, -32)
+
+	if input_locked:
+		velocity = Vector2.ZERO
+		move_and_slide()
+		return
 
 	var move_input := Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	velocity = move_input * SPEED
@@ -49,7 +55,7 @@ func _physics_process(delta: float) -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if is_dead:
+	if is_dead or input_locked:
 		return
 	if event.is_action_pressed("interact"):
 		try_interact()
