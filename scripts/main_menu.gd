@@ -6,6 +6,7 @@ const DIFFICULTIES: Array[String] = ["normal", "hard"]
 const FADE_DURATION := 0.25
 const SILENCE_AFTER_FADE := 0.5
 const NAV_COOLDOWN := 0.18
+const INPUT_BLOCK_DURATION := 0.5
 
 @onready var title: Label = $Panel/VBox/Title
 @onready var subtitle: Label = $Panel/VBox/Subtitle
@@ -19,11 +20,13 @@ var _locale_index := 0
 var _difficulty_index := 0
 var _transitioning := false
 var _nav_cooldown := 0.0
+var _input_block := 0.0
 
 
 func _ready() -> void:
 	MusicManager.set_state(MusicManager.State.MENU)
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	_input_block = INPUT_BLOCK_DURATION
 
 	_locale_index = LOCALES.find(Settings.locale)
 	if _locale_index < 0:
@@ -46,9 +49,15 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if _nav_cooldown > 0.0:
 		_nav_cooldown -= delta
+	if _input_block > 0.0:
+		_input_block -= delta
 
 
 func _input(event: InputEvent) -> void:
+	if _input_block > 0.0 and event.is_action_pressed("ui_accept"):
+		get_viewport().set_input_as_handled()
+		return
+
 	# Гасим повторные ui_up/ui_down в пределах NAV_COOLDOWN — иначе при
 	# держании стика/клавиши фокус проскакивает несколько пунктов за один импульс.
 	if event.is_action_pressed("ui_up") or event.is_action_pressed("ui_down") \
