@@ -37,7 +37,7 @@ alignment = 1
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 40
-text = "Bottom-Down Maid"
+text = "Bottom Up Maid"
 horizontal_alignment = 1
 
 [node name="Subtitle" type="Label" parent="Panel/VBox" unique_id=121065079]
@@ -54,11 +54,11 @@ layout_mode = 2
 size_flags_horizontal = 4
 text = "Start"
 
-[node name="QuitButton" type="Button" parent="Panel/VBox" unique_id=481389910]
+[node name="DifficultyButton" type="Button" parent="Panel/VBox" unique_id=481389913]
 custom_minimum_size = Vector2(220, 48)
 layout_mode = 2
 size_flags_horizontal = 4
-text = "Quit"
+text = "[ NORMAL ]"
 
 [node name="LangButton" type="Button" parent="Panel/VBox" unique_id=481389911]
 custom_minimum_size = Vector2(220, 48)
@@ -66,17 +66,19 @@ layout_mode = 2
 size_flags_horizontal = 4
 text = "[ RU ]"
 
-[node name="DifficultyButton" type="Button" parent="Panel/VBox" unique_id=481389913]
+[node name="QuitButton" type="Button" parent="Panel/VBox" unique_id=481389910]
 custom_minimum_size = Vector2(220, 48)
 layout_mode = 2
 size_flags_horizontal = 4
-text = "[ NORMAL ]"
+text = "Quit"
 
 [node name="BlackFade" type="ColorRect" parent="." unique_id=481389912]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_top = 1.0
+offset_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2

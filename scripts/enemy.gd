@@ -2,12 +2,15 @@ extends CharacterBody2D
 
 const SPEED := 80.0
 const AGGRO_RANGE := 300.0
+const SHOOT_RANGE_NORMAL := 128.0
+const SHOOT_RANGE_HARD := 256.0
 const SHOOT_COOLDOWN := 1.8
+const OFF_SCREEN_MARGIN := 64.0
 const STEP_DISTANCE := 28.0
-const SCAN_SPEED := 1.0   # рад/с для осмотра в режиме idle
-const SCAN_SWEEP := 2.2   # угол поворота до смены направления (рад)
-const SIDESTEP_TIME := 0.35
-const SIDESTEP_ANGLE := PI / 3.0
+const SCAN_SPEED := 1.0
+const SCAN_SWEEP := 2.2
+const BURST_MIN := 2
+const BURST_MAX := 4
 
 signal enemy_died
 signal aggro_started
@@ -18,24 +21,24 @@ signal aggro_ended
 @export var blood_splatter_scene: PackedScene
 @export var blood_spray_scene: PackedScene
 @export var casing_scene: PackedScene
-@export var is_idle: bool = false  # стоит на месте, крутит головой
+@export var is_idle: bool = false
 
 var direction := Vector2.ZERO
 var player_ref: CharacterBody2D = null
 var shoot_timer := 0.0
 var _in_aggro := false
 var _is_shooting := false
+var _burst_remaining := 0
 var _step_accum := 0.0
 var _next_leg_frame := 1
 var _scan_dir := 1.0
 var _scan_accum := 0.0
-var _sidestep_dir := Vector2.ZERO
-var _sidestep_timer := 0.0
 var _on_screen := true
 
 @onready var muzzle := $Muzzle
 @onready var anim_sprite: AnimatedSprite2D = $FacingSprite
 @onready var legs_sprite: Sprite2D = $LegsSprite
+@onready var nav_agent: NavigationAgent2D = $NavigationAgent2D
 
 
 func _ready() -> void:
@@ -70,27 +73,31 @@ func _physics_process(delta: float) -> void:
 	if _can_see_player():
 		if not _in_aggro:
 			_in_aggro = true
+			shoot_timer = 0.0
 			emit_signal("aggro_started")
-			# Idle-враг после первого обнаружения становится полноценным преследователем
 			if is_idle:
 				is_idle = false
 				$WanderTimer.start()
-		var to_player := (player_ref.global_position - global_position).normalized()
+
+		var to_player := player_ref.global_position - global_position
+		var dist := to_player.length()
 		rotation = to_player.angle()
-		if _sidestep_timer > 0.0:
-			_sidestep_timer -= delta
-			direction = _sidestep_dir
-		else:
-			direction = to_player
 		shoot_timer += delta
-		if shoot_timer >= SHOOT_COOLDOWN:
-			shoot_timer = 0.0
-			_fire_at_player()
+
+		var shoot_range := SHOOT_RANGE_HARD if Settings.difficulty == "hard" else SHOOT_RANGE_NORMAL
+		if dist > shoot_range:
+			nav_agent.target_position = player_ref.global_position
+			var nav_dir := nav_agent.get_next_path_position() - global_position
+			direction = nav_dir.normalized() if nav_dir.length() > 1.0 else to_player.normalized()
+		else:
+			direction = Vector2.ZERO
+			if shoot_timer >= SHOOT_COOLDOWN:
+				shoot_timer = 0.0
+				_fire_at_player()
 	else:
 		if _in_aggro:
 			_in_aggro = false
 			emit_signal("aggro_ended")
-			_sidestep_timer = 0.0
 			_pick_direction()
 
 		if is_idle:
@@ -103,33 +110,20 @@ func _physics_process(delta: float) -> void:
 	velocity = direction * SPEED
 	move_and_slide()
 	_update_legs(delta)
-	if get_slide_collision_count() > 0:
-		if _in_aggro:
-			_start_sidestep()
-		else:
-			_pick_direction()
-
-
-func _start_sidestep() -> void:
-	var to_player := (player_ref.global_position - global_position).normalized()
-	var normal := get_slide_collision(0).get_normal()
-	var side := signf(to_player.cross(normal))
-	if side == 0.0:
-		side = 1.0
-	_sidestep_dir = to_player.rotated(side * SIDESTEP_ANGLE)
-	_sidestep_timer = SIDESTEP_TIME
 
 
 func _can_see_player() -> bool:
 	if player_ref == null or player_ref.is_dead:
 		return false
+	var canvas_pos: Vector2 = get_viewport().get_canvas_transform() * global_position
+	if not get_viewport().get_visible_rect().grow(OFF_SCREEN_MARGIN).has_point(canvas_pos):
+		return false
 	if global_position.distance_to(player_ref.global_position) > AGGRO_RANGE:
 		return false
-	var space := get_world_2d().direct_space_state
 	var query := PhysicsRayQueryParameters2D.create(
 		global_position,
 		player_ref.global_position,
-		1,        # маска: только стены (layer 1)
+		1,
 		[get_rid()]
 	)
 	return get_world_2d().direct_space_state.intersect_ray(query).is_empty()
@@ -147,6 +141,7 @@ func _do_scan(delta: float) -> void:
 func _fire_at_player() -> void:
 	if enemy_bullet_scene == null or _is_shooting:
 		return
+	_burst_remaining = randi_range(BURST_MIN, BURST_MAX) - 1
 	_is_shooting = true
 	anim_sprite.play("guns_action")
 	anim_sprite.frame_changed.connect(_on_guns_frame_changed)
@@ -172,16 +167,22 @@ func _spawn_casing() -> void:
 	casing.global_position = muzzle.global_position
 	casing.rotation = rotation
 	var side := Vector2.UP.rotated(rotation)
-	var velocity := side * randf_range(10.0, 20.0) + Vector2.LEFT.rotated(rotation) * randf_range(3.0, 8.0)
+	var vel := side * randf_range(10.0, 20.0) + Vector2.LEFT.rotated(rotation) * randf_range(3.0, 8.0)
 	var spin := randf_range(8.0, 14.0)
 	get_tree().current_scene.add_child(casing)
-	casing.launch(velocity, spin)
+	casing.launch(vel, spin)
 
 
 func _on_guns_finished() -> void:
-	_is_shooting = false
-	anim_sprite.stop()
-	anim_sprite.frame = 0
+	if _burst_remaining > 0:
+		_burst_remaining -= 1
+		anim_sprite.play("guns_action")
+		anim_sprite.frame_changed.connect(_on_guns_frame_changed)
+		anim_sprite.animation_finished.connect(_on_guns_finished, CONNECT_ONE_SHOT)
+	else:
+		_is_shooting = false
+		anim_sprite.stop()
+		anim_sprite.frame = 0
 
 
 func _update_legs(delta: float) -> void:

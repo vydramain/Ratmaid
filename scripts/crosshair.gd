@@ -1,6 +1,6 @@
 extends Sprite2D
 
-const MAX_GAMEPAD_DIST := 25.0
+const MAX_GAMEPAD_DIST := 96.0
 const GAMEPAD_HIDE_THRESHOLD := 0.15
 
 

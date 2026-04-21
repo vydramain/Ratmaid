@@ -71,5 +71,7 @@ shape = SubResource("SwatShape")
 position = Vector2(18, 0)
 
 [node name="ActivationNotifier" type="VisibleOnScreenNotifier2D" parent="."]
-rect = Rect2(-74, -74, 148, 148)
+rect = Rect2(-114, -114, 228, 228)
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
 

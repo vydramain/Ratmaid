@@ -8,7 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://chud0ratmaid1" path="res://scenes/ui/hud.tscn" id="4_hud"]
 [ext_resource type="PackedScene" uid="uid://ctrashbin0001" path="res://scenes/props/trash_bin.tscn" id="5_bin"]
 [ext_resource type="PackedScene" uid="uid://bvbo1i2a6s8o7" path="res://scenes/enemy/swat_enemy.tscn" id="6_swat"]
-[ext_resource type="PackedScene" path="res://scenes/ui/exit_arrow.tscn" id="7_arrow"]
+[ext_resource type="PackedScene" uid="uid://dd55nq75reaea" path="res://scenes/ui/exit_arrow.tscn" id="7_arrow"]
 [ext_resource type="Script" uid="uid://1p76gfg6ltxt" path="res://scripts/furniture_collision.gd" id="8_frcol"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_r72dd"]
@@ -130,6 +130,11 @@ sources/0 = SubResource("TileSetAtlasSource_jmes4")
 
 [sub_resource type="RectangleShape2D" id="ExitShape"]
 size = Vector2(48, 32)
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_r72dd"]
+vertices = PackedVector2Array(625.46875, -578, 626.5, -557, 357.1172, -557, 349.34375, -578, 350.34375, -548, 355.8828, -455.0703, 317, -372.14063, 363, -384, 627.8203, -384, 627.1719, -347.96094, 324, -346.96875, 249.79688, -346.9297, 107.24219, -347.92188, 107.75781, -369.1328, 107, -553, 107, -568.0469, 203, -566.8828, 201, -553, 256, -251.07031, 108, -250.0625, 108, -276.0625, 251.20313, -277.0703, 324, -277, 317, -467, 317, -548, 627, -277, 627, -251.96094, 322.21875, -250.96875, 321.21875, -207, 256, -207, 317, -445, 203, -445, 203, -467, 220, -467, 220, -542, 201, -542, 243, -580, 203, -580, 627, -453.0703, 627, -428.96094, 363, -427.96094, 243, -467)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3), PackedInt32Array(4, 3, 2, 5), PackedInt32Array(6, 7, 8, 9, 10, 11), PackedInt32Array(11, 12, 13, 6), PackedInt32Array(14, 15, 16, 17), PackedInt32Array(18, 19, 20, 21, 22), PackedInt32Array(23, 24, 4, 5), PackedInt32Array(22, 25, 26, 27, 18), PackedInt32Array(28, 29, 18, 27), PackedInt32Array(30, 31, 32, 33), PackedInt32Array(34, 35, 17, 16, 36), PackedInt32Array(16, 37, 36), PackedInt32Array(5, 38, 39, 40, 30), PackedInt32Array(10, 22, 21, 11), PackedInt32Array(7, 6, 30, 40), PackedInt32Array(23, 5, 30, 41), PackedInt32Array(41, 30, 33), PackedInt32Array(36, 41, 33, 34)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(635, -588, 339, -588, 340, -558, 307, -558, 307, -477, 253, -477, 253, -590, 193, -590, 193, -577, 112, -578, 112, -590, 97, -590, 97, -532, 112, -532, 113, -543, 191, -543, 191, -532, 210, -532, 210, -477, 193, -477, 193, -435, 307, -435, 307, -382, 98, -379, 97, -338, 240, -337, 241, -287, 98, -286, 98, -240, 246, -241, 246, -197, 331, -197, 332, -241, 637, -242, 637, -287, 334, -287, 334, -337, 637, -338, 638, -394, 373, -394, 373, -418, 637, -419, 637, -463, 366, -465, 367, -547, 637, -547)])
 
 [node name="Level01" type="Node2D" unique_id=20127519]
 
@@ -328,3 +333,6 @@ script = ExtResource("3_lvlmgr")
 swat_scene = ExtResource("6_swat")
 
 [node name="HUD" parent="LevelManager" unique_id=1429565570 instance=ExtResource("4_hud")]
+
+[node name="NavigationRegion2D" type="NavigationRegion2D" parent="." unique_id=1286721390]
+navigation_polygon = SubResource("NavigationPolygon_r72dd")

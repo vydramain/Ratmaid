@@ -46,10 +46,12 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 
 	var aim := Input.get_vector("aim_left", "aim_right", "aim_up", "aim_down")
-	if aim.length() < AIM_DEADZONE:
-		aim = get_global_mouse_position() - global_position
-	if aim.length() > 0.001:
+	if aim.length() >= AIM_DEADZONE:
 		rotation = aim.angle()
+	elif not InputDevice.is_gamepad():
+		var mouse_aim := get_global_mouse_position() - global_position
+		if mouse_aim.length() > 0.001:
+			rotation = mouse_aim.angle()
 
 	_update_legs(delta)
 

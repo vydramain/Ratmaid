@@ -5,7 +5,7 @@ extends Node
 ## и применяет их на старте.
 
 const CONFIG_PATH := "user://settings.cfg"
-const DEFAULT_LOCALE := "ru"
+const DEFAULT_LOCALE := "en"
 const DEFAULT_DIFFICULTY := "normal"
 
 var locale: String = DEFAULT_LOCALE
