@@ -70,3 +70,6 @@ shape = SubResource("SwatShape")
 [node name="Muzzle" type="Marker2D" parent="."]
 position = Vector2(18, 0)
 
+[node name="ActivationNotifier" type="VisibleOnScreenNotifier2D" parent="."]
+rect = Rect2(-74, -74, 148, 148)
+

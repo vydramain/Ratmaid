@@ -85,4 +85,4 @@ autostart = true
 position = Vector2(18, 0)
 
 [node name="ActivationNotifier" type="VisibleOnScreenNotifier2D" parent="." unique_id=1712994001]
-rect = Rect2(-50, -50, 100, 100)
+rect = Rect2(-74, -74, 148, 148)

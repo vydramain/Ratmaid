@@ -9,6 +9,7 @@ var _step_accum := 0.0
 var _next_leg_frame := 1
 var _shoot_timer := 0.0
 var _is_shooting := false
+var _on_screen := true
 
 @export var enemy_bullet_scene: PackedScene
 
@@ -23,9 +24,14 @@ func _ready() -> void:
 	collision_layer = 32
 	collision_mask = 131
 	add_to_group("swat")
+	var notifier: VisibleOnScreenNotifier2D = $ActivationNotifier
+	notifier.screen_entered.connect(func() -> void: _on_screen = true)
+	notifier.screen_exited.connect(func() -> void: _on_screen = false)
 
 
 func _physics_process(delta: float) -> void:
+	if not _on_screen:
+		return
 	if player_ref == null or player_ref.is_dead:
 		return
 
