@@ -2,9 +2,10 @@ extends CharacterBody2D
 
 const SPEED := 80.0
 const AGGRO_RANGE := 300.0
-const SHOOT_RANGE_NORMAL := 128.0
-const SHOOT_RANGE_HARD := 256.0
-const SHOOT_COOLDOWN := 1.8
+const DIFFICULTY := {
+	"normal": { "shoot_range": 128.0, "shoot_cooldown": 1.8 },
+	"hard":   { "shoot_range": 256.0, "shoot_cooldown": 0.9 },
+}
 const OFF_SCREEN_MARGIN := 64.0
 const STEP_DISTANCE := 28.0
 const SCAN_SPEED := 1.0
@@ -84,14 +85,15 @@ func _physics_process(delta: float) -> void:
 		rotation = to_player.angle()
 		shoot_timer += delta
 
-		var shoot_range := SHOOT_RANGE_HARD if Settings.difficulty == "hard" else SHOOT_RANGE_NORMAL
+		var diff: Dictionary = DIFFICULTY.get(Settings.difficulty, DIFFICULTY["normal"])
+		var shoot_range: float = diff["shoot_range"]
 		if dist > shoot_range:
 			nav_agent.target_position = player_ref.global_position
 			var nav_dir := nav_agent.get_next_path_position() - global_position
 			direction = nav_dir.normalized() if nav_dir.length() > 1.0 else to_player.normalized()
 		else:
 			direction = Vector2.ZERO
-			if shoot_timer >= SHOOT_COOLDOWN:
+			if shoot_timer >= diff["shoot_cooldown"]:
 				shoot_timer = 0.0
 				_fire_at_player()
 	else:
