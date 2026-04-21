@@ -1,8 +1,8 @@
 extends Node
 
-## Динамическая музыкальная система.
-## Все 5 треков играют одновременно и всегда синхронизированы.
-## Смена состояния = fade in/out нужных дорожек, без перезапуска.
+## Dynamic music system.
+## All 5 stems play simultaneously and stay in sync at all times.
+## Changing state fades individual tracks in/out without restarting.
 
 enum State {
 	MENU,
@@ -10,15 +10,15 @@ enum State {
 	FIGHT,
 	DIALOGUE,
 	CLEANUP,
-	RESULT,   # Победа / поражение — замораживает текущий микс
-	SILENT,   # Плавно гасит все стемы (для переходов между сценами)
+	RESULT,   # Win / lose — freezes the current mix
+	SILENT,   # Fades all stems out (used during scene transitions)
 }
 
-const FADE_TIME   := 0.25   # секунд на fade
-const VOLUME_ON   :=  0.0   # dB — слышно
-const VOLUME_OFF  := -80.0  # dB — беззвучно, но трек продолжает идти
+const FADE_TIME   := 0.25   # seconds per fade
+const VOLUME_ON   :=  0.0   # dB — audible
+const VOLUME_OFF  := -80.0  # dB — silent, but the track keeps running for sync
 
-# Какие дорожки активны в каждом состоянии
+# Which stems are active in each state
 const STATE_TRACKS: Dictionary = {
 	State.MENU:      { drums=false, bass_groove=false, bass_low=true,  guitar_chords=false, guitar_notes=true  },
 	State.PRE_FIGHT: { drums=false, bass_groove=true,  bass_low=false, guitar_chords=false, guitar_notes=false },
@@ -42,7 +42,7 @@ var _tween: Tween = null
 func _ready() -> void:
 	_build_players()
 	_start_all()
-	# Инициализируем микс для меню без анимации
+	# Apply menu mix immediately without animation
 	_apply_instantly(State.MENU)
 
 
@@ -65,17 +65,16 @@ func _build_players() -> void:
 
 
 func _start_all() -> void:
-	# Запускаем все треки одновременно — они синхронизированы с этого момента
+	# Start all stems at once — they are in sync from this point on
 	for key: String in _players:
 		var p: AudioStreamPlayer = _players[key]
 		if p.stream != null:
 			p.play(0.0)
 
 
-# Вызывать из LevelManager и MainMenu
 func set_state(new_state: State) -> void:
 	if new_state == State.RESULT:
-		# Заморозить текущий микс — ничего не меняем
+		# Freeze current mix — do not change anything
 		_current_state = new_state
 		return
 	if new_state == _current_state:

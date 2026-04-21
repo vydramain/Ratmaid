@@ -1,12 +1,9 @@
 extends TileMapLayer
 
-## Для каждого атласного тайла тайлсета строит коллизионные полигоны
-## по непрозрачным пикселям текстуры через BitMap.opaque_to_polygons.
-## Сетка коллизии совпадает с пиксельной сеткой; прозрачные пиксели игнорируются.
-##
-## Физический слой 0 назначаем на bit 8 (furniture). Маска 0 — на объектах, что
-## имеют бит 8 в collision_mask (персонажи), срабатывает блокировка.
-## Пули в своих масках бита 8 не имеют → пролетают сквозь.
+## Builds per-pixel collision polygons for every atlas tile using
+## BitMap.opaque_to_polygons. Transparent pixels are ignored.
+## Physics layer 0 is assigned to bit 8 (furniture).
+## Bullets do not have bit 8 in their collision mask, so they pass through.
 
 const POLY_EPSILON := 1.0
 const ALPHA_THRESHOLD := 0.1
@@ -45,7 +42,7 @@ func _ready() -> void:
 				var data := atlas.get_tile_data(coords, alt)
 				if data == null:
 					continue
-				# Очистим существующие полигоны, чтобы не накапливать после hot-reload
+				# Clear existing polygons to avoid accumulation after hot-reload
 				while data.get_collision_polygons_count(0) > 0:
 					data.remove_collision_polygon(0, 0)
 				for pi in polys.size():

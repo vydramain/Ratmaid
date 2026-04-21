@@ -1,7 +1,6 @@
 extends CPUParticles2D
 
-## Одноразовый всплеск красных частиц при попадании в противника.
-## Самоудаляется после окончания эмиссии.
+## One-shot red particle burst on enemy hit. Self-frees when emission ends.
 
 
 func _ready() -> void:

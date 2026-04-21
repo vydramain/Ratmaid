@@ -28,13 +28,13 @@ var _swat_spawned := false
 func _ready() -> void:
 	add_to_group("level_manager")
 	Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
-	# Найти игрока
+	# Find player
 	var players := get_tree().get_nodes_in_group("player")
 	if players.size() > 0:
 		player = players[0]
 		player.player_died.connect(on_player_died)
 
-	# Назначить ссылку на игрока врагам, посчитать и заморозить до старта боя
+	# Wire player ref into enemies, count them, and freeze until combat starts
 	for enemy in get_tree().get_nodes_in_group("enemies"):
 		enemy.player_ref = player
 		enemy.enemy_died.connect(on_enemy_died)
@@ -43,10 +43,10 @@ func _ready() -> void:
 		enemy.process_mode = Node.PROCESS_MODE_DISABLED
 		enemies_alive += 1
 
-	# Отключить ExitDoor до фазы уборки
+	# Disable exit door until cleanup phase
 	exit_door.process_mode = Node.PROCESS_MODE_DISABLED
 
-	# Ящик для трупов заранее в сцене, включается в CLEANUP
+	# Trash bin is in the scene from the start, activated in CLEANUP
 	trash_bin.deactivate()
 	trash_bin.corpse_deposited.connect(on_corpse_binned)
 
@@ -66,7 +66,7 @@ func _process(delta: float) -> void:
 	hud.update_timer(cleanup_timer)
 
 
-# ─── Переходы состояний ───────────────────────────────────────────────────────
+# ─── State transitions ────────────────────────────────────────────────────────
 
 func _enter_intro_dialogue() -> void:
 	current_state = State.INTRO
@@ -106,11 +106,11 @@ func _enter_cleanup() -> void:
 	hud.show_mode(false)
 	hud.set_hints([["interact", "hud.hint.pickup"], ["toggle_mop", "hud.hint.toggle_mop"]])
 
-	# Активировать выход
+	# Activate exit door
 	exit_door.process_mode = Node.PROCESS_MODE_INHERIT
 	exit_door.body_entered.connect(on_exit_reached)
 
-	# Включить ящик и стрелку-указатель
+	# Activate trash bin and exit arrow
 	trash_bin.activate()
 	exit_arrow.activate(exit_door)
 
@@ -137,7 +137,7 @@ func _enter_lose(reason: State) -> void:
 			hud.show_gameover("timer")
 
 
-# ─── Обработчики сигналов ─────────────────────────────────────────────────────
+# ─── Signal handlers ──────────────────────────────────────────────────────────
 
 func on_enemy_died() -> void:
 	enemies_alive -= 1
@@ -184,7 +184,7 @@ func on_blood_cleaned() -> void:
 	_check_cleanup_hint()
 
 
-# ─── Вспомогательные ──────────────────────────────────────────────────────────
+# ─── Helpers ──────────────────────────────────────────────────────────────────
 
 func register_blood_splatter(splatter: Area2D) -> void:
 	splatter.cleaned.connect(on_blood_cleaned)
@@ -200,7 +200,7 @@ func on_casing_cleaned() -> void:
 
 
 func _check_cleanup_hint() -> void:
-	# Заглушка: в будущем можно показывать подсказку "Всё чисто! Уходи!"
+	pass
 	pass
 
 

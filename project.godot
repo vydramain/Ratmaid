@@ -26,7 +26,9 @@ Settings="*res://scripts/settings_store.gd"
 window/size/viewport_width=1200
 window/size/viewport_height=800
 window/size/mode=3
-window/stretch/mode="viewport"
+window/size/borderless=true
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
 window/stretch/scale=2.0
 
 [gui]
@@ -139,4 +141,5 @@ locale/translations=PackedStringArray("res://localization/strings.en.translation
 
 [rendering]
 
+textures/canvas_textures/default_texture_filter=3
 rendering_device/driver.windows="d3d12"

@@ -41,8 +41,8 @@ func show_mode(is_mop: bool) -> void:
 	mode_label.text = tr("hud.mode.mop") if is_mop else tr("hud.mode.guns")
 
 
-## hints — массив пар: [["action_name", "hint_key"], ...]
-## Пример: [["interact", "hud.hint.pickup"], ["toggle_mop", "hud.hint.toggle_mop"]]
+## hints — array of pairs: [["action_name", "hint_key"], ...]
+## Example: [["interact", "hud.hint.pickup"], ["toggle_mop", "hud.hint.toggle_mop"]]
 func set_hints(hints: Array) -> void:
 	_active_hints = hints
 	_refresh_all_hints()

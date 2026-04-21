@@ -58,8 +58,8 @@ func _input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 		return
 
-	# Гасим повторные ui_up/ui_down в пределах NAV_COOLDOWN — иначе при
-	# держании стика/клавиши фокус проскакивает несколько пунктов за один импульс.
+	# Suppress rapid ui_up/ui_down within NAV_COOLDOWN — holding a stick/key
+	# would otherwise skip several menu items per input pulse.
 	if event.is_action_pressed("ui_up") or event.is_action_pressed("ui_down") \
 			or event.is_action_pressed("ui_left") or event.is_action_pressed("ui_right"):
 		if _nav_cooldown > 0.0:

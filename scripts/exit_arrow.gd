@@ -1,9 +1,9 @@
 extends Node2D
 
-## UI-стрелка, которая указывает игроку на зону выхода в фазе CLEANUP.
-## Всегда на экране: если выход виден — сидит на его краю со стороны игрока;
-## если выхода нет в кадре — залипает на границе видимой области камеры
-## на луче «игрок → выход». Слегка качается вдоль направления.
+## On-screen arrow pointing toward the exit zone during CLEANUP.
+## If the exit is visible it sits at its nearest edge; if off-screen
+## it snaps to the viewport boundary along the player-to-exit ray.
+## Wobbles slightly along the pointing direction.
 
 @export var margin: float = 24.0
 @export var wobble_amp: float = 4.0
@@ -49,7 +49,7 @@ func _process(delta: float) -> void:
 
 	var base_pos: Vector2
 	if bounded.intersects(exit_rect):
-		# Выход в кадре — садимся на ближайшую к игроку точку коллайдера и чуть наружу
+		# Exit is on screen — sit at the collider edge closest to the player
 		var edge := Vector2(
 			clampf(player_pos.x, exit_rect.position.x, exit_rect.end.x),
 			clampf(player_pos.y, exit_rect.position.y, exit_rect.end.y)
@@ -60,7 +60,7 @@ func _process(delta: float) -> void:
 		else:
 			base_pos = edge
 	else:
-		# Выход за кадром — пересечение луча игрок→выход с видимой областью
+		# Exit is off-screen — intersect player→exit ray with the viewport boundary
 		base_pos = _ray_rect_exit(player_pos, exit_rect.get_center(), bounded)
 
 	var to_exit := exit_rect.get_center() - base_pos
@@ -89,8 +89,8 @@ func _get_exit_rect() -> Rect2:
 	return Rect2(exit.global_position, Vector2.ZERO)
 
 
-## Возвращает точку выхода луча (from → to) из прямоугольника rect.
-## Предполагается, что from находится внутри rect (игрок в кадре).
+## Returns the point where the ray (from → to) exits rect.
+## Assumes from is inside rect (player is on screen).
 func _ray_rect_exit(from: Vector2, to: Vector2, rect: Rect2) -> Vector2:
 	var dir := to - from
 	var length := dir.length()
@@ -109,7 +109,7 @@ func _ray_rect_exit(from: Vector2, to: Vector2, rect: Rect2) -> Vector2:
 	return from + dir * maxf(t_max, 0.0)
 
 
-## 0=вправо, 1=вверх, 2=влево, 3=вниз (кадры в спрайте именно в таком порядке).
+## 0=right, 1=up, 2=left, 3=down — matches the sprite frame order.
 func _cardinal_frame(direction: Vector2) -> int:
 	var angle := direction.angle()
 	if angle >= -PI * 0.25 and angle <= PI * 0.25:

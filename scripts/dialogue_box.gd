@@ -2,10 +2,10 @@ extends CanvasLayer
 
 signal dialogue_finished
 
-const TYPEWRITER_SPEED := 0.03  # секунд на символ
+const TYPEWRITER_SPEED := 0.03  # seconds per character
 
-## Наборы реплик. Каждый элемент: { "speaker": "signal"|"maid", "key": "dialogue.*" }
-## Спикер определяет, какой AudioStreamPlayer пиликает во время тайпрайтинга.
+## Dialogue sets. Each entry: { "speaker": "signal"|"maid", "key": "dialogue.*" }
+## Speaker determines which AudioStreamPlayer ticks during typewriting.
 const SETS: Dictionary = {
 	"intro": [
 		{"speaker": "maid", "key": "dialogue.intro.maid"},
@@ -75,7 +75,7 @@ func _process(delta: float) -> void:
 
 func _play_type_sfx(ch: String) -> void:
 	if ch.strip_edges() == "":
-		return  # не тарахтим на пробелах/переносах
+		return  # no tick on spaces or line breaks
 	var player: AudioStreamPlayer = type_sfx.get(_current_speaker)
 	if player == null or player.stream == null:
 		return

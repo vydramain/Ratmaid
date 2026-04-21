@@ -1,19 +1,7 @@
 extends Node
 
-## Отслеживает тип активного устройства ввода и бренд геймпада.
-## Autoload-синглтон: InputDevice
-##
-## Иконки кнопок (опционально):
-##   res://images/icons/keyboard/key_e.png
-##   res://images/icons/keyboard/key_tab.png
-##   res://images/icons/keyboard/key_lmb.png
-##   res://images/icons/keyboard/key_enter.png
-##   res://images/icons/xbox/button_a.png
-##   res://images/icons/xbox/dpad_up.png
-##   res://images/icons/xbox/button_rt.png
-##   res://images/icons/playstation/button_cross.png
-##   res://images/icons/playstation/dpad_up.png
-##   res://images/icons/playstation/button_r2.png
+## Tracks the active input device type and gamepad brand.
+## Autoload singleton: InputDevice
 
 enum DeviceType { KEYBOARD_MOUSE, GAMEPAD }
 enum GamepadBrand { XBOX, PLAYSTATION }
@@ -26,7 +14,7 @@ var gamepad_brand: GamepadBrand = GamepadBrand.XBOX
 const _TEXT_KB := {
 	"interact":   "E",
 	"toggle_mop": "Tab",
-	"shoot":      "ЛКМ",
+	"shoot":      "LMB",
 	"ui_accept":  "Enter",
 }
 const _TEXT_XBOX := {
@@ -42,7 +30,7 @@ const _TEXT_PS := {
 	"ui_accept":  "×",
 }
 
-# Пути к иконкам. Если файла нет — используется текст.
+# Icon paths. Falls back to text label if the file does not exist.
 const _ICON_PATHS := {
 	"keyboard": {
 		"interact":   "res://images/icons/keyboard/key_e.png",
@@ -87,7 +75,7 @@ func _detect_brand() -> void:
 			return
 
 
-## Возвращает текстовую подсказку: "[E]", "[A]", "[×]" и т.д.
+## Returns a text hint label: "[E]", "[A]", "[×]", etc.
 func get_hint_text(action: String) -> String:
 	var table: Dictionary
 	if current_type == DeviceType.KEYBOARD_MOUSE:
@@ -100,7 +88,7 @@ func get_hint_text(action: String) -> String:
 	return "[%s]" % key
 
 
-## Возвращает иконку для действия, или null если файла нет.
+## Returns the icon texture for an action, or null if the file does not exist.
 func get_hint_icon(action: String) -> Texture2D:
 	var device_key: String = _device_key()
 	if not _ICON_PATHS.has(device_key):

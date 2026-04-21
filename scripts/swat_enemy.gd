@@ -2,9 +2,10 @@ extends CharacterBody2D
 
 const SPEED := 120.0
 const STEP_DISTANCE := 28.0
-const SHOOT_COOLDOWN := 1.0
-const SHOOT_RANGE_NORMAL := 128.0
-const SHOOT_RANGE_HARD := 256.0
+const DIFFICULTY := {
+	"normal": { "shoot_range": 128.0, "shoot_cooldown": 1.0 },
+	"hard":   { "shoot_range": 256.0, "shoot_cooldown": 0.5 },
+}
 const BURST_MIN := 2
 const BURST_MAX := 4
 
@@ -26,7 +27,7 @@ var _on_screen := true
 
 func _ready() -> void:
 	# layer 6 (bitmask 32) = swat; mask: walls (1) + player (2) + furniture (128) = 131
-	# Пули игрока (bitmask 8) НЕ входят в маску — отлетают
+	# Player bullets (bitmask 8) are not in the mask — they bounce off
 	collision_layer = 32
 	collision_mask = 131
 	add_to_group("swat")
@@ -52,14 +53,14 @@ func _physics_process(delta: float) -> void:
 	rotation = to_player.angle()
 	_shoot_timer += delta
 
-	var shoot_range := SHOOT_RANGE_HARD if Settings.difficulty == "hard" else SHOOT_RANGE_NORMAL
-	if dist > shoot_range:
+	var diff: Dictionary = DIFFICULTY.get(Settings.difficulty, DIFFICULTY["normal"])
+	if dist > diff["shoot_range"]:
 		nav_agent.target_position = player_ref.global_position
 		var nav_dir := nav_agent.get_next_path_position() - global_position
 		velocity = (nav_dir.normalized() if nav_dir.length() > 1.0 else to_player.normalized()) * SPEED
 	else:
 		velocity = Vector2.ZERO
-		if _shoot_timer >= SHOOT_COOLDOWN:
+		if _shoot_timer >= diff["shoot_cooldown"]:
 			_shoot_timer = 0.0
 			_fire_at_player()
 

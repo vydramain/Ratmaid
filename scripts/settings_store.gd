@@ -1,8 +1,8 @@
 extends Node
 
 ## Autoload: Settings
-## Хранит пользовательские настройки (сейчас только locale) в user://settings.cfg
-## и применяет их на старте.
+## Persists user preferences (locale, difficulty) to user://settings.cfg
+## and applies them on startup.
 
 const CONFIG_PATH := "user://settings.cfg"
 const DEFAULT_LOCALE := "en"

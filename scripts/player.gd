@@ -75,7 +75,7 @@ func die(impulse: Vector2 = Vector2.ZERO) -> void:
 	drop_corpse()
 	_spawn_death_blood(impulse)
 	emit_signal("player_died")
-	# TODO: заглушка — добавить анимацию смерти, когда будет спрайт
+	# TODO: add death animation when sprite is ready
 
 
 func _spawn_death_blood(impulse: Vector2) -> void:
@@ -141,7 +141,7 @@ func try_interact() -> void:
 	if carrying_corpse != null:
 		drop_corpse()
 		return
-	# Corpse.PickupArea — это Area2D на layer 4; InteractionArea имеет mask 4
+	# Corpse.PickupArea is an Area2D on layer 4; InteractionArea has mask 4
 	var area: Area2D = $InteractionArea
 	for overlap in area.get_overlapping_areas():
 		var parent := overlap.get_parent()
@@ -193,7 +193,7 @@ func _spawn_casing(muzzle: Node2D, is_left: bool) -> void:
 	var casing := casing_scene.instantiate()
 	casing.global_position = muzzle.global_position
 	casing.rotation = rotation
-	# Гильза вылетает перпендикулярно дулу наружу (в сторону "плеча" пистолета)
+	# Casing ejects perpendicular to the barrel, toward the pistol shoulder
 	var side := Vector2.UP.rotated(rotation) if is_left else Vector2.DOWN.rotated(rotation)
 	var velocity := side * randf_range(10.0, 20.0) + Vector2.LEFT.rotated(rotation) * randf_range(3.0, 8.0)
 	var spin := randf_range(8.0, 14.0) * (-1.0 if is_left else 1.0)

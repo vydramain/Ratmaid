@@ -1,9 +1,8 @@
 extends RigidBody2D
 
-## Стреляная гильза. Летит с небольшим импульсом, крутится вокруг оси,
-## останавливается и лежит до уборки шваброй (CleanupArea + mop_mode).
-## Может быть "подсчётной" — тогда регистрируется в LevelManager и считается
-## к очистке на сложности HARD.
+## Shell casing. Flies with a small impulse, spins, then freezes until mopped up.
+## If counts_toward_cleanup is true it registers with LevelManager and is
+## required for a clean exit on HARD difficulty.
 
 signal cleaned
 
@@ -32,7 +31,7 @@ func _physics_process(_delta: float) -> void:
 		freeze = true
 
 
-## Запустить гильзу: `velocity` — начальная скорость, `spin` — угловая (рад/с).
+## Launch the casing: `velocity` is the initial linear velocity, `spin` is angular velocity (rad/s).
 func launch(velocity: Vector2, spin: float) -> void:
 	linear_velocity = velocity
 	angular_velocity = spin
