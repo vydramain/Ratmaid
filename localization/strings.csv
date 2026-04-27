@@ -2,7 +2,15 @@ keys,ru,en
 menu.title,Bottom-Down Maid,Bottom-Down Maid
 menu.subtitle,Перехвати сигнал,Intercept the signal
 menu.start,Начать,Start
+menu.settings,Настройки,Settings
 menu.quit,Выход,Quit
+settings.title,НАСТРОЙКИ,SETTINGS
+settings.difficulty,Сложность,Difficulty
+settings.language,Язык,Language
+settings.master_volume,Общая громкость,Master volume
+settings.music_volume,Громкость музыки,Music volume
+settings.sfx_volume,Громкость звуков,Sound volume
+settings.back,Назад,Back
 difficulty.normal,ОБЫЧНАЯ,NORMAL
 difficulty.hard,СЛОЖНАЯ,HARD
 hud.mode.guns,[ ПИСТОЛЕТЫ ],[ GUNS ]

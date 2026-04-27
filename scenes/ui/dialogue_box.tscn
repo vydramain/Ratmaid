@@ -30,5 +30,7 @@ horizontal_alignment = 2
 text = "[Enter] продолжить"
 
 [node name="TypeSfxSignal" type="AudioStreamPlayer" parent="."]
+bus = &"SFX"
 
 [node name="TypeSfxMaid" type="AudioStreamPlayer" parent="."]
+bus = &"SFX"

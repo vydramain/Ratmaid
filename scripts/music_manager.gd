@@ -59,6 +59,7 @@ func _build_players() -> void:
 		player.name = key
 		player.stream = streams[key]
 		player.volume_db = VOLUME_OFF
+		player.bus = "Music"
 		player.autoplay = false
 		add_child(player)
 		_players[key] = player
