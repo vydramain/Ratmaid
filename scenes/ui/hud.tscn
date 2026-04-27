@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://chud0ratmaid1"]
+[gd_scene load_steps=5 format=3 uid="uid://chud0ratmaid1"]
 
 [ext_resource type="Script" path="res://scripts/hud.gd" id="1_hud"]
 [ext_resource type="PackedScene" uid="uid://cdialogue0001" path="res://scenes/ui/dialogue_box.tscn" id="2_dialogue"]
 [ext_resource type="Script" path="res://scripts/crosshair.gd" id="3_crosshair"]
+[ext_resource type="PackedScene" uid="uid://cpause0menu1" path="res://scenes/menu/pause_menu.tscn" id="4_pause"]
 
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1_hud")
@@ -58,10 +59,25 @@ horizontal_alignment = 1
 autowrap_mode = 3
 text = "GAME OVER"
 
-[node name="HintLabel" type="Label" parent="ResultPanel/VBox"]
+[node name="RestartHintLabel" type="Label" parent="ResultPanel/VBox"]
 layout_mode = 2
 horizontal_alignment = 1
-text = "[Enter] Вернуться в меню"
+text = "[R] Restart"
+visible = false
+
+[node name="RestartProgress" type="ProgressBar" parent="ResultPanel/VBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 8)
+min_value = 0.0
+max_value = 100.0
+value = 0.0
+show_percentage = false
+visible = false
+
+[node name="MenuHintLabel" type="Label" parent="ResultPanel/VBox"]
+layout_mode = 2
+horizontal_alignment = 1
+text = "[Esc] Back to menu"
 
 [node name="HintsBar" type="Label" parent="."]
 anchors_preset = 7
@@ -80,3 +96,5 @@ visible = false
 
 [node name="Crosshair" type="Sprite2D" parent="."]
 script = ExtResource("3_crosshair")
+
+[node name="PauseMenu" parent="." instance=ExtResource("4_pause")]

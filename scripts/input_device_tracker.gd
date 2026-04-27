@@ -12,22 +12,28 @@ var current_type: DeviceType = DeviceType.KEYBOARD_MOUSE
 var gamepad_brand: GamepadBrand = GamepadBrand.XBOX
 
 const _TEXT_KB := {
-	"interact":   "E",
-	"toggle_mop": "Tab",
-	"shoot":      "LMB",
-	"ui_accept":  "Enter",
+	"interact":    "E",
+	"toggle_mop":  "Tab",
+	"shoot":       "LMB",
+	"ui_accept":   "Enter",
+	"pause":       "Esc",
+	"restart_tap": "R",
 }
 const _TEXT_XBOX := {
-	"interact":   "A",
-	"toggle_mop": "D-pad ↑",
-	"shoot":      "RT",
-	"ui_accept":  "A",
+	"interact":     "A",
+	"toggle_mop":   "D-pad ↑",
+	"shoot":        "RT",
+	"ui_accept":    "A",
+	"pause":        "Start",
+	"restart_hold": "A",
 }
 const _TEXT_PS := {
-	"interact":   "×",
-	"toggle_mop": "D-pad ↑",
-	"shoot":      "R2",
-	"ui_accept":  "×",
+	"interact":     "×",
+	"toggle_mop":   "D-pad ↑",
+	"shoot":        "R2",
+	"ui_accept":    "×",
+	"pause":        "Options",
+	"restart_hold": "×",
 }
 
 # Icon paths. Falls back to text label if the file does not exist.

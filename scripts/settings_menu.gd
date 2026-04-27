@@ -1,5 +1,10 @@
 extends Control
 
+## Settings panel. Used as a standalone scene from the main menu, or
+## instantiated as an overlay child by the pause menu (embedded mode).
+
+signal settings_closed
+
 const MAIN_MENU_PATH := "res://scenes/menu/main_menu.tscn"
 const LOCALES: Array[String] = ["ru", "en"]
 const DIFFICULTIES: Array[String] = ["normal", "hard"]
@@ -26,6 +31,11 @@ var _locale_index := 0
 var _difficulty_index := 0
 var _nav_cooldown := 0.0
 var _input_block := 0.0
+var _embedded := false
+
+
+func set_embedded(value: bool) -> void:
+	_embedded = value
 
 
 func _ready() -> void:
@@ -127,4 +137,7 @@ func _on_sfx_changed(value: float) -> void:
 
 
 func _return_to_menu() -> void:
-	get_tree().change_scene_to_file(MAIN_MENU_PATH)
+	if _embedded:
+		emit_signal("settings_closed")
+	else:
+		get_tree().change_scene_to_file(MAIN_MENU_PATH)

@@ -20,6 +20,12 @@ hud.hint.toggle_mop,Швабра/Пистолет,Mop/Guns
 hud.hint.return,Вернуться в меню,Back to menu
 hud.hint.skip,пропустить,skip
 hud.hint.continue,продолжить,continue
+hud.hint.restart_tap,Перезапустить уровень,Restart level
+hud.hint.restart_hold,удерживай для перезапуска,hold to restart
+pause.title,ПАУЗА,PAUSED
+pause.continue,Продолжить,Continue
+pause.settings,Настройки,Settings
+pause.main_menu,В главное меню,Main menu
 result.dead,ВЫ УБИТЫ,YOU ARE DEAD
 result.exit_early,Полицейские нашли улики и арестовали тебя.,The cops found the evidence and arrested you.
 result.timer,Спецназ окружил здание. Тебя убили при задержании.,"SWAT surrounded the building. You were killed during the raid."
