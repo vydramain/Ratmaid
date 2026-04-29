@@ -1,28 +1,48 @@
-# Ludum Dare — Player Feedback
+# Ludum Dare — Отзывы игроков
 
-## Positives
+## Положительное
 
-- Great visual style and art
-- Music fits well; dynamic music that drops the break when shooting starts was especially appreciated
-- Controls feel fast, responsive, and well-matched to the game's pace
-- Gunplay feels tight and satisfying
-- The cleaning mechanic is a fun and humorous twist
-- Mop-up animation is charming
-- The bottom-up perspective is visually funny and different
-- Impressive for a 48-hour / one-person project
-- Fun and humorous concept (maid instead of hitman)
+- Отличный визуальный стиль и арт (AkihiroF, UkuleleFury, niterich)
+- Музыка хорошо вписывается; особенно отметили динамическую музыку, в которой брейк падает в момент начала стрельбы (AkihiroF, The Big Lost, UkuleleFury, attentionadmin, Verbante; LesDremlet похвалил басовую линию и amen-брейк)
+- Управление быстрое, отзывчивое и хорошо подходит темпу игры (The Big Lost, niterich, attentionadmin)
+- Стрельба ощущается чётко и приятно (The Big Lost)
+- Отметили динамичный геймплей (Nekuake, niterich)
+- Механика уборки — забавный и юморный твист (YurisCat, WeGlove, UkuleleFury, Nekuake)
+- Анимация уборки шваброй очаровательна (Ansible)
+- Нижний ракурс выглядит смешно и необычно (Phlip45, The Big Lost, Verbante; BushFire ценит эксперименты с ракурсом)
+- Впечатляюще для проекта одного человека за 48 часов (The Big Lost, Roitchie)
+- Весёлая и юморная концепция (горничная вместо киллера) (Ilari, Roitchie, YurisCat)
+- Сравнение с Hotline Miami в позитивном ключе (Roitchie, Phlip45, YurisCat, Fassenberg, niterich)
+- Сложность ощущается «в самый раз» / приятный челлендж для части игроков (AkihiroF, UkuleleFury, Verbante — прошёл нормал за две попытки)
+- Хорошее общее исполнение для джемовой игры (WeGlove, Fassenberg, Ansible)
 
-## Issues / Bugs
+## Проблемы и баги
 
-- Hard mode win condition unclear: cleaning bullet casings is required but not communicated to the player (Phlip45 beat hard mode and still got "caught" because of uncleaned bullet casings)
-- Bodies render underneath blood pools in the Windows build, making corpses hard to see (YurisCat)
-- No Windows build in the compo version — only Linux and web; web HTML didn't work for at least one player (wo_ri_gou_le)
+- Неясное условие победы на hard: нужно убирать гильзы, но об этом игроку не сообщают (Phlip45 прошёл hard и всё равно получил «пойман» из-за неубранных гильз)
+- В Windows-сборке тела рендерятся под лужами крови, из-за чего трупы плохо видно (YurisCat; attentionadmin предлагает положить кровь на другой sorting-слой)
+- В compo-версии нет Windows-сборки — только Linux и web; web HTML у одного из игроков не запустился (wo_ri_gou_le)
+- SWAT кажется непобедимым — как минимум один игрок прошёл только через escape (Roroto Sic)
+- Неочевидная визуальная подача пуль (Nekuake)
+- Формулировка «bottom up» сбила игрока с толку — он думал, что играет за робота-горничную, пока не понял, что речь о ракурсе камеры (BushFire)
+- Китайский текст: «丁丁», использованный как декоративные «буквы», для носителей языка читается как сленговое/милое слово, означающее «писюн» — забавно, но непреднамеренно. wo_ri_gou_le предложил вариант «十十» как безопасную альтернативу, если хочется сохранить визуал (wo_ri_gou_le)
+- На момент джема не было кнопки рестарта после смерти и полноэкранного режима (attentionadmin) — оба пункта уже закрыты в постджемовых коммитах (меню паузы + быстрый рестарт, fullscreen)
 
-## Improvement Suggestions
+## Предложения по улучшению
 
-- **Instant retry on death** — returning to the main menu and rewatching the opening dialog every time is frustrating; restart the level immediately like Hotline Miami does (LesDremlet, The Big Lost, niterich)
-- **Cleaner onboarding for the cleaning mechanic** — several players didn't realize they needed to dispose of bodies, or didn't know where; make this more discoverable (niterich)
-- **Perspective switch mechanic** — a game where the player can toggle between top-down and bottom-up perspectives could be a stronger hook (Phlip45)
-- **Difficulty balance** — normal difficulty feels very hard to some players, closer to "hell difficulty" (xiyuan); consider tuning or clearer difficulty labeling
-- **Theme integration** — the bottom-up perspective doesn't meaningfully connect to the gameplay mechanics; the theme could be woven in more intentionally (The Big Lost)
-- The cleaning mechanic feels more punishing than fun to some players — worth considering how to make it feel rewarding rather than mandatory busywork (Fassenberg)
+- **Мгновенный рестарт после смерти** — возвращаться в главное меню и каждый раз пересматривать вступительный диалог раздражает; нужно перезапускать уровень мгновенно, как в Hotline Miami (LesDremlet, The Big Lost, niterich, attentionadmin)
+- **Чище онбординг механики уборки** — несколько игроков не поняли, что тела нужно прятать, или не знали куда; стоит сделать это очевиднее (niterich)
+- **Механика смены ракурса** — игра, где можно переключаться между видом сверху и снизу, могла бы быть сильным хуком (Phlip45)
+- **Баланс сложности** — мнения разделились: одним нормал ощущается как «адская сложность» (xiyuan), другим hard кажется слишком лёгким (BushFire); стоит подкрутить или яснее подписать уровни сложности. torte478 пошутил, что в игре только «hard» и «very hard»
+- **Связь с темой джема** — нижний ракурс не связан с геймплейными механиками осмысленно; тему можно вплести более намеренно (The Big Lost)
+- **Ощущение от уборки** — для части игроков она ощущается скорее наказанием, чем удовольствием; стоит подумать, как сделать её вознаграждающей, а не обязательной рутиной (Fassenberg)
+- **Несколько уровней с растущей сложностью** — расширило бы опыт и позволило бы сложности нарастать естественно (BushFire)
+- **Sorting-слои для крови и тел** — отдельно зафиксировать починку порядка отрисовки, чтобы трупы были видны под кровью (attentionadmin, YurisCat)
+- **Windows-сборка** — предоставить рабочий экспорт под Windows в дополнение к Linux/web (wo_ri_gou_le)
+
+## Ответы автора и заметки
+
+- Подтвердил Phlip45, что гильзы считаются «неубранными уликами» на hard; открыт к идее переключения ракурса
+- Пообещал attentionadmin кнопку рестарта (уже сделано); также повторил, что нижний ракурс — отличительная визуальная особенность игры
+- Пообещал wo_ri_gou_le попробовать собрать Windows-версию, несмотря на отсутствие Windows дома; объяснил, что китайские иероглифы выбраны по визуальному сходству с латинской фразой «BOTTOM UP MAID»
+- Объяснил YurisCat, что нижний ракурс задуман так, чтобы кровь, растекаясь по полу, естественно прикрывала тела, и что модификатор уборки заставляет сначала вычистить пол, прежде чем прятать тела
+- Принял предложение BushFire про несколько уровней — отметил, что не успел в рамках 48-часового джема; на следующем LD планирует замахнуться на большее
