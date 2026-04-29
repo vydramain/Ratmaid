@@ -25,6 +25,8 @@ const INPUT_BLOCK_DURATION := 0.5
 @onready var sfx_label: Label = $Panel/VBox/SfxVolumeRow/Label
 @onready var sfx_slider: HSlider = $Panel/VBox/SfxVolumeRow/Slider
 @onready var sfx_value: Label = $Panel/VBox/SfxVolumeRow/Value
+@onready var fullscreen_label: Label = $Panel/VBox/FullscreenRow/Label
+@onready var fullscreen_button: Button = $Panel/VBox/FullscreenRow/Value
 @onready var back_button: Button = $Panel/VBox/BackButton
 
 var _locale_index := 0
@@ -52,12 +54,14 @@ func _ready() -> void:
 	master_slider.value = Settings.master_volume
 	music_slider.value = Settings.music_volume
 	sfx_slider.value = Settings.sfx_volume
+	fullscreen_button.button_pressed = Settings.fullscreen
 
 	difficulty_button.pressed.connect(_on_difficulty_pressed)
 	language_button.pressed.connect(_on_language_pressed)
 	master_slider.value_changed.connect(_on_master_changed)
 	music_slider.value_changed.connect(_on_music_changed)
 	sfx_slider.value_changed.connect(_on_sfx_changed)
+	fullscreen_button.toggled.connect(_on_fullscreen_toggled)
 	back_button.pressed.connect(_return_to_menu)
 
 	_refresh_labels()
@@ -99,6 +103,8 @@ func _refresh_labels() -> void:
 	master_label.text = tr("settings.master_volume")
 	music_label.text = tr("settings.music_volume")
 	sfx_label.text = tr("settings.sfx_volume")
+	fullscreen_label.text = tr("settings.fullscreen")
+	fullscreen_button.text = "[ %s ]" % tr("settings.on" if fullscreen_button.button_pressed else "settings.off")
 	back_button.text = tr("settings.back")
 	_refresh_volume_label(master_value, master_slider.value)
 	_refresh_volume_label(music_value, music_slider.value)
@@ -134,6 +140,11 @@ func _on_music_changed(value: float) -> void:
 func _on_sfx_changed(value: float) -> void:
 	Settings.set_sfx_volume(value)
 	_refresh_volume_label(sfx_value, value)
+
+
+func _on_fullscreen_toggled(pressed: bool) -> void:
+	Settings.set_fullscreen(pressed)
+	_refresh_labels()
 
 
 func _return_to_menu() -> void:

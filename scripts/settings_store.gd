@@ -8,6 +8,7 @@ const CONFIG_PATH := "user://settings.cfg"
 const DEFAULT_LOCALE := "en"
 const DEFAULT_DIFFICULTY := "normal"
 const DEFAULT_VOLUME := 1.0
+const DEFAULT_FULLSCREEN := true
 
 const BUS_MASTER := "Master"
 const BUS_MUSIC := "Music"
@@ -19,6 +20,7 @@ var difficulty: String = DEFAULT_DIFFICULTY
 var master_volume: float = DEFAULT_VOLUME
 var music_volume: float = DEFAULT_VOLUME
 var sfx_volume: float = DEFAULT_VOLUME
+var fullscreen: bool = DEFAULT_FULLSCREEN
 
 
 func _ready() -> void:
@@ -27,6 +29,7 @@ func _ready() -> void:
 	_apply_bus_volume(BUS_MASTER, master_volume)
 	_apply_bus_volume(BUS_MUSIC, music_volume)
 	_apply_bus_volume(BUS_SFX, sfx_volume)
+	_apply_fullscreen(fullscreen)
 
 
 func set_locale(new_locale: String) -> void:
@@ -62,6 +65,26 @@ func set_sfx_volume(value: float) -> void:
 	_save()
 
 
+func set_fullscreen(value: bool) -> void:
+	if value == fullscreen:
+		return
+	fullscreen = value
+	_apply_fullscreen(fullscreen)
+	_save()
+
+
+func _apply_fullscreen(value: bool) -> void:
+	# Project defaults to mode=3 + borderless=true. The borderless flag persists
+	# across mode changes, so a plain mode swap leaves windowed mode without
+	# decorations. Drive both flags explicitly to match Project Settings behaviour.
+	if value:
+		DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, true)
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
+	else:
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+		DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, false)
+
+
 func _apply_bus_volume(bus_name: String, value: float) -> void:
 	var idx := AudioServer.get_bus_index(bus_name)
 	if idx < 0:
@@ -80,6 +103,7 @@ func _load() -> void:
 	master_volume = clampf(cfg.get_value("settings", "master_volume", DEFAULT_VOLUME), 0.0, 1.0)
 	music_volume = clampf(cfg.get_value("settings", "music_volume", DEFAULT_VOLUME), 0.0, 1.0)
 	sfx_volume = clampf(cfg.get_value("settings", "sfx_volume", DEFAULT_VOLUME), 0.0, 1.0)
+	fullscreen = cfg.get_value("settings", "fullscreen", DEFAULT_FULLSCREEN)
 
 
 func _save() -> void:
@@ -89,4 +113,5 @@ func _save() -> void:
 	cfg.set_value("settings", "master_volume", master_volume)
 	cfg.set_value("settings", "music_volume", music_volume)
 	cfg.set_value("settings", "sfx_volume", sfx_volume)
+	cfg.set_value("settings", "fullscreen", fullscreen)
 	cfg.save(CONFIG_PATH)

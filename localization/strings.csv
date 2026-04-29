@@ -10,6 +10,9 @@ settings.language,Язык,Language
 settings.master_volume,Общая громкость,Master volume
 settings.music_volume,Громкость музыки,Music volume
 settings.sfx_volume,Громкость звуков,Sound volume
+settings.fullscreen,Полноэкранный режим,Fullscreen
+settings.on,ВКЛ,ON
+settings.off,ВЫКЛ,OFF
 settings.back,Назад,Back
 difficulty.normal,ОБЫЧНАЯ,NORMAL
 difficulty.hard,СЛОЖНАЯ,HARD
