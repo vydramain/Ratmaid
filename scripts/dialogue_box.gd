@@ -14,6 +14,24 @@ const SETS: Dictionary = {
 		{"speaker": "signal", "key": "dialogue.after_fight.signal"},
 		{"speaker": "maid", "key": "dialogue.after_fight.maid"},
 	],
+	"tutorial_intro": [
+		{"speaker": "signal", "key": "dialogue.tutorial_intro.signal"},
+		{"speaker": "maid", "key": "dialogue.tutorial_intro.maid"},
+	],
+	"tutorial_bar_call": [
+		{"speaker": "signal", "key": "dialogue.tutorial_bar_call.signal"},
+	],
+	"tutorial_return": [
+		{"speaker": "signal", "key": "dialogue.tutorial_return.signal"},
+	],
+	"push_event": [
+		{"speaker": "signal", "key": "dialogue.push_event.signal"},
+	],
+	"breach": [
+		{"speaker": "signal", "key": "dialogue.breach.signal_1"},
+		{"speaker": "signal", "key": "dialogue.breach.signal_2"},
+		{"speaker": "maid", "key": "dialogue.breach.maid"},
+	],
 }
 
 var _lines: Array = []

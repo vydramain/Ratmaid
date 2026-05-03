@@ -81,8 +81,8 @@ func _input(event: InputEvent) -> void:
 		return
 
 	if event.is_action_pressed("ui_cancel"):
-		_return_to_menu()
 		get_viewport().set_input_as_handled()
+		_return_to_menu()
 		return
 
 	# Mirror main_menu's nav cooldown so held input doesn't skip rows.
