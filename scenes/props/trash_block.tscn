@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://d4iher1nrluog"]
+
+[node name="TrashBlock" type="CharacterBody2D" unique_id=2103679994]
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1132031910]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=631827597]
+
+[node name="MopWashStation" type="Area2D" parent="." unique_id=1625930008]
+
+[node name="BagDispenserStation" type="Area2D" parent="." unique_id=1668888403]
+
+[node name="IncineratorStation" type="Area2D" parent="." unique_id=71349129]
+
+[node name="VacuumStation" type="Area2D" parent="." unique_id=2145411199]
