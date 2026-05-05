@@ -1,50 +1,61 @@
 [gd_scene format=3 uid="uid://d4iher1nrluog"]
 
 [ext_resource type="Texture2D" uid="uid://dl4yu2bkalav2" path="res://images/fr_corpse_bucket.png" id="1_fm5pj"]
+[ext_resource type="Script" uid="uid://dl0ug5is6i7i7" path="res://scripts/trash_block.gd" id="1_ta1t1"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ta1t1"]
 size = Vector2(30, 50)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_16sd1"]
-size = Vector2(12, 16)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3w67c"]
+size = Vector2(50, 65)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fm5pj"]
 size = Vector2(19, 22)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_vdx3e"]
-size = Vector2(12, 11)
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_m0lk2"]
 size = Vector2(19, 17)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_01ywt"]
-size = Vector2(15, 28)
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1vkpw"]
 size = Vector2(21.5, 40)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_ltb7i"]
-size = Vector2(15, 28)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ciwtx"]
 size = Vector2(15, 40)
 
 [node name="TrashBlock" type="CharacterBody2D" unique_id=2103679994]
+script = ExtResource("1_ta1t1")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1132031910]
 position = Vector2(6.5, 0)
 texture = ExtResource("1_fm5pj")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=631827597]
+light_mask = 129
+visibility_layer = 131
 rotation = -1.5707963
 shape = SubResource("RectangleShape2D_ta1t1")
 debug_color = Color(0.8420193, 0.37478837, 0.2016286, 0.41960785)
 
+[node name="HitchArea2D" type="Area2D" parent="." unique_id=1900587296]
+
+[node name="InterractionCollisionShape2D2" type="CollisionShape2D" parent="HitchArea2D" unique_id=213938413]
+rotation = 1.5707964
+shape = SubResource("RectangleShape2D_3w67c")
+debug_color = Color(0.3545152, 0.53494555, 0.82943505, 0.41960785)
+
 [node name="MopWashStation" type="Area2D" parent="." unique_id=1625930008]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="MopWashStation" unique_id=77327633]
-position = Vector2(14.5, -6)
-shape = SubResource("RectangleShape2D_16sd1")
+[node name="ColorRect" type="ColorRect" parent="MopWashStation" unique_id=1065428227]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.5
+offset_top = -14.0
+offset_right = 20.500002
+offset_bottom = 2.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_stretch_ratio = 0.5
+color = Color(0.48651773, 0.33830175, 0.050944198, 1)
 
 [node name="EffectCollisionShape2D2" type="CollisionShape2D" parent="MopWashStation" unique_id=599397381]
 position = Vector2(18, -9)
@@ -53,9 +64,18 @@ debug_color = Color(0.60784316, 0.5372549, 0.15294118, 0.41960785)
 
 [node name="BagDispenserStation" type="Area2D" parent="." unique_id=1668888403]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="BagDispenserStation" unique_id=1076316980]
-position = Vector2(14.5, 8.5)
-shape = SubResource("RectangleShape2D_vdx3e")
+[node name="ColorRect" type="ColorRect" parent="BagDispenserStation" unique_id=1034134981]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.5
+offset_top = 3.0
+offset_right = 20.5
+offset_bottom = 14.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_stretch_ratio = 0.5
+color = Color(0.48651773, 0.33830175, 0.050944198, 1)
 
 [node name="EffectCollisionShape2D" type="CollisionShape2D" parent="BagDispenserStation" unique_id=812719887]
 position = Vector2(18, 11.5)
@@ -77,10 +97,6 @@ grow_vertical = 2
 size_flags_stretch_ratio = 0.5
 color = Color(0.48651773, 0.33830175, 0.050944198, 1)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="IncineratorStation" unique_id=945539906]
-position = Vector2(-16, 0)
-shape = SubResource("RectangleShape2D_01ywt")
-
 [node name="EffectCollisionShape2D2" type="CollisionShape2D" parent="IncineratorStation" unique_id=764531857]
 position = Vector2(-19.25, 0)
 shape = SubResource("RectangleShape2D_1vkpw")
@@ -88,8 +104,18 @@ debug_color = Color(0.60784316, 0.5372549, 0.15294118, 0.41960785)
 
 [node name="VacuumStation" type="Area2D" parent="." unique_id=2145411199]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="VacuumStation" unique_id=1348260846]
-shape = SubResource("RectangleShape2D_ltb7i")
+[node name="ColorRect" type="ColorRect" parent="VacuumStation" unique_id=1673230719]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -7.0
+offset_top = -14.0
+offset_right = 8.0
+offset_bottom = 14.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_stretch_ratio = 0.5
+color = Color(0.48651773, 0.33830175, 0.050944198, 1)
 
 [node name="EffectCollisionShape2D2" type="CollisionShape2D" parent="VacuumStation" unique_id=1013943763]
 shape = SubResource("RectangleShape2D_ciwtx")
