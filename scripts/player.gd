@@ -22,6 +22,7 @@ var is_dead := false
 var mop_mode := false
 var carrying_corpse: Node2D = null
 var input_locked := false
+var hitched_block : Node2D = null
 var _weapons_locked := false
 
 
@@ -73,6 +74,7 @@ func die(impulse: Vector2 = Vector2.ZERO) -> void:
 		return
 	is_dead = true
 	drop_corpse()
+	drop_trash_block()
 	_spawn_death_blood(impulse)
 	emit_signal("player_died")
 	# TODO: add death animation when sprite is ready
@@ -138,25 +140,38 @@ func _on_guns_drawn() -> void:
 
 
 func try_interact() -> void:
-	if carrying_corpse != null:
+	if carrying_corpse != null or hitched_block != null:
 		drop_corpse()
+		drop_trash_block()
 		return
-	# Corpse.PickupArea is an Area2D on layer 4; InteractionArea has mask 4
+	
+	# Corpse.PickupArea and TrashBlock.HitchArea is an Area2D on layer 4; InteractionArea has mask 4
 	var area: Area2D = $InteractionArea
 	for overlap in area.get_overlapping_areas():
 		var parent := overlap.get_parent()
 		if parent.is_in_group("corpse"):
 			pickup_corpse(parent)
 			return
+		if parent.is_in_group("trash_block"):
+			pickup_trash_block(parent)
+			return
 
 
 func pickup_corpse(corpse: Node2D) -> void:
 	carrying_corpse = corpse
 
+func pickup_trash_block(trash_block: Node2D) -> void:
+	if trash_block.is_in_group("trash_block"):
+		trash_block.hitch(self)
+	hitched_block = trash_block
 
 func drop_corpse() -> void:
 	carrying_corpse = null
 
+func drop_trash_block() -> void:
+	if hitched_block.is_in_group("trash_block"):
+		hitched_block.unhitch()
+	hitched_block = null
 
 func _update_legs(delta: float) -> void:
 	var speed := velocity.length()

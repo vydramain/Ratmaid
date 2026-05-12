@@ -36,6 +36,7 @@ shape = SubResource("RectangleShape2D_ta1t1")
 debug_color = Color(0.8420193, 0.37478837, 0.2016286, 0.41960785)
 
 [node name="HitchArea2D" type="Area2D" parent="." unique_id=1900587296]
+collision_layer = 4
 
 [node name="InterractionCollisionShape2D2" type="CollisionShape2D" parent="HitchArea2D" unique_id=213938413]
 rotation = 1.5707964

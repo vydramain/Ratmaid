@@ -1,12 +1,18 @@
 extends CharacterBody2D
 
-const MIN_DISTANCE_LENGTH := 32.0
+const MIN_DISTANCE_LENGTH := 48.0
 const MAX_PULL_SPEED := 260.0
 
 var hitched_to : Node2D  = null
+var front_direction : Vector2 = Vector2.ZERO
+
+func _ready() -> void:
+	add_to_group("trash_block")
 
 func hitch(player: Node2D) -> void:
 	hitched_to = player
+	var player_local := player.to_local(global_position)
+	front_direction = Vector2.RIGHT if player_local.x >= 0 else Vector2.LEFT
 
 func unhitch() -> void:
 	hitched_to = null

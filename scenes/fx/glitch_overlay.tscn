@@ -1,12 +1,12 @@
-[gd_scene load_steps=2 format=3 uid="uid://cglitchoverlay01"]
+[gd_scene format=3 uid="uid://bhr54ycflovw3"]
 
-[ext_resource type="Script" path="res://scripts/glitch_overlay.gd" id="1_gl"]
+[ext_resource type="Script" uid="uid://beoq0hiw4axqh" path="res://scripts/glitch_overlay.gd" id="1_gl"]
 
-[node name="GlitchOverlay" type="CanvasLayer"]
+[node name="GlitchOverlay" type="CanvasLayer" unique_id=20217766]
 layer = 100
 script = ExtResource("1_gl")
 
-[node name="Tint" type="ColorRect" parent="."]
+[node name="Tint" type="ColorRect" parent="." unique_id=1719329761]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -15,7 +15,7 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(1, 0.1, 0.5, 1)
 
-[node name="Bar1" type="ColorRect" parent="."]
+[node name="Bar1" type="ColorRect" parent="." unique_id=1605712167]
 anchors_preset = 10
 anchor_right = 1.0
 offset_top = 80.0
@@ -24,7 +24,7 @@ grow_horizontal = 2
 mouse_filter = 2
 color = Color(0.4, 1, 1, 0.7)
 
-[node name="Bar2" type="ColorRect" parent="."]
+[node name="Bar2" type="ColorRect" parent="." unique_id=577836405]
 anchors_preset = 10
 anchor_right = 1.0
 offset_top = 220.0

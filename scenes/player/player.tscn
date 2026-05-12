@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://c0iuqrq6c0qbw" path="res://scenes/bullet/bullet.tscn" id="2_bullet"]
 [ext_resource type="Texture2D" uid="uid://c8ky4urk0tqsi" path="res://images/gg_arms.png" id="3_lvxji"]
 [ext_resource type="Texture2D" uid="uid://fspf2biiyfda" path="res://images/gg_colortough.png" id="4_p47bc"]
-[ext_resource type="PackedScene" uid="uid://ccasingplayer01" path="res://scenes/props/casing_player.tscn" id="5_casing"]
+[ext_resource type="PackedScene" uid="uid://dumfn0bdm1iyq" path="res://scenes/props/casing_player.tscn" id="5_casing"]
 [ext_resource type="PackedScene" uid="uid://dw8dkcyu1u0jc" path="res://scenes/props/blood_spray.tscn" id="6_spray"]
 [ext_resource type="PackedScene" uid="uid://dw8dreifn4hvc" path="res://scenes/props/blood_splatter.tscn" id="7_blood"]
 
