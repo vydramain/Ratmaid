@@ -24,7 +24,7 @@ func _physics_process(delta: float) -> void:
 		move_and_slide()
 		return
 	
-	var to_player := hitched_to.global_position - global_position
+	var to_player := hitched_to.global_position - (global_position + front_direction)
 	var distance := to_player.length()
 	if distance <= MIN_DISTANCE_LENGTH:
 		velocity = Vector2.ZERO
