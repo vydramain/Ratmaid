@@ -2,6 +2,7 @@ extends CharacterBody2D
 
 const MIN_DISTANCE_LENGTH := 48.0
 const MAX_PULL_SPEED := 260.0
+const ROT_SPEED := PI / 2
 
 var hitched_to : Node2D  = null
 var front_direction : Vector2 = Vector2.ZERO
@@ -29,6 +30,8 @@ func _physics_process(delta: float) -> void:
 	if distance <= MIN_DISTANCE_LENGTH:
 		velocity = Vector2.ZERO
 	else:
+		var rotation_angle = lerp_angle(rotation, to_player.angle(), ROT_SPEED * delta)
+		rotate(rotation_angle)
 		var direction := to_player / distance
 		var slack := distance - MIN_DISTANCE_LENGTH
 		var desired_speed := slack / delta
