@@ -1,5 +1,8 @@
 extends CharacterBody2D
 
+# Шпаргалка по математике (системы координат, векторы, lerp_angle, atan2, Тейлор):
+# см. trash_block_math.md в этой же папке.
+
 const MIN_DISTANCE_LENGTH := 48.0  # "длина верёвки" — ближе не тянем
 const MAX_PULL_SPEED := 260.0      # потолок скорости подтягивания
 
